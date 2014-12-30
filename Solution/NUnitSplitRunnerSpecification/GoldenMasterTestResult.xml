@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<test-results name="Merged results" total="18" errors="0" failures="6" not-run="6" inconclusive="6" skipped="0" invalid="0" date="2014-12-28" time="00:00:49">
+  <environment nunit-version="2.6.4.14350" clr-version="2.0.50727.8009" os-version="Microsoft Windows NT 6.2.9200.0" platform="Win32NT" cwd="C:\Users\astral\Documents\GitHub\nunit-split-runner\Solution\NUnitSplitRunnerSpecification\bin\Debug" machine-name="JERUSALEM" user="astral" user-domain="JERUSALEM" />
+  <culture-info current-culture="pl-PL" current-uiculture="pl-PL" />
+  <test-suite type="Test Project" name="" executed="True" result="Failure" time="0.656000" asserts="0">
+    <results>
+      <test-suite type="Assembly" name="C:\Users\astral\Documents\GitHub\nunit-split-runner\Solution\NUnitSplitRunnerSpecification\bin\Debug\ClassLibrary1.dll" executed="True" result="Failure" success="False" time="0.095" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="ClassLibrary1" executed="True" result="Failure" success="False" time="0.081" asserts="0">
+            <results>
+              <test-suite type="TestFixture" name="Tests" executed="True" result="Failure" success="False" time="0.079" asserts="0">
+                <results>
+                  <test-case name="ClassLibrary1.Tests.Failed" executed="True" result="Failure" success="False" time="0.042" asserts="0">
+                    <failure>
+                      <message><![CDATA[this is Failed test from ClassLibrary1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                      <stack-trace><![CDATA[w ClassLibrary1.Tests.Failed() w c:\Users\astral\Documents\GitHub\nunit-split-runner\Solution\ClassLibrary1\Tests.cs:wiersz 17
+]]></stack-trace>
+                    </failure>
+                  </test-case>
+                  <test-case name="ClassLibrary1.Tests.Ignored" executed="False" result="Ignored">
+                    <reason>
+                      <message><![CDATA[this is Ignored test from ClassLibrary1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                  <test-case name="ClassLibrary1.Tests.Inconclusive" executed="True" result="Inconclusive" success="False" time="0.003" asserts="0">
+                    <reason>
+                      <message><![CDATA[this is Inconclusive test from ClassLibrary1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                  <test-case name="ClassLibrary1.Tests.Passed" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                    <reason>
+                      <message><![CDATA[this is Passed test from ClassLibrary1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="Assembly" name="C:\Users\astral\Documents\GitHub\nunit-split-runner\Solution\NUnitSplitRunnerSpecification\bin\Debug\ClassLibrary2.dll" executed="True" result="Failure" success="False" time="0.163" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="ClassLibrary2" executed="True" result="Failure" success="False" time="0.148" asserts="0">
+            <results>
+              <test-suite type="TestFixture" name="Tests" executed="True" result="Failure" success="False" time="0.147" asserts="0">
+                <results>
+                  <test-case name="ClassLibrary2.Tests.Failed" executed="True" result="Failure" success="False" time="0.113" asserts="0">
+                    <failure>
+                      <message><![CDATA[this is Failed test from ClassLibrary2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                      <stack-trace><![CDATA[w ClassLibrary2.Tests.Failed() w c:\Users\astral\Documents\GitHub\nunit-split-runner\Solution\ClassLibrary2\Tests.cs:wiersz 17
+]]></stack-trace>
+                    </failure>
+                  </test-case>
+                  <test-case name="ClassLibrary2.Tests.Ignored" executed="False" result="Ignored">
+                    <reason>
+                      <message><![CDATA[this is Ignored test from ClassLibrary2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                  <test-case name="ClassLibrary2.Tests.Inconclusive" executed="True" result="Inconclusive" success="False" time="0.002" asserts="0">
+                    <reason>
+                      <message><![CDATA[this is Inconclusive test from ClassLibrary2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                  <test-case name="ClassLibrary2.Tests.Passed" executed="True" result="Success" success="True" time="0.003" asserts="0">
+                    <reason>
+                      <message><![CDATA[this is Passed test from ClassLibrary2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="Assembly" name="C:\Users\astral\Documents\GitHub\nunit-split-runner\Solution\NUnitSplitRunnerSpecification\bin\Debug\ClassLibrary3.dll" executed="True" result="Failure" success="False" time="0.208" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="ClassLibrary3" executed="True" result="Failure" success="False" time="0.190" asserts="0">
+            <results>
+              <test-suite type="TestFixture" name="Tests" executed="True" result="Failure" success="False" time="0.189" asserts="0">
+                <results>
+                  <test-case name="ClassLibrary3.Tests.Failed" executed="True" result="Failure" success="False" time="0.152" asserts="0">
+                    <failure>
+                      <message><![CDATA[this is Failed test from ClassLibrary3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                      <stack-trace><![CDATA[w ClassLibrary3.Tests.Failed() w c:\Users\astral\Documents\GitHub\nunit-split-runner\Solution\ClassLibrary3\Tests.cs:wiersz 17
+]]></stack-trace>
+                    </failure>
+                  </test-case>
+                  <test-case name="ClassLibrary3.Tests.Ignored" executed="False" result="Ignored">
+                    <reason>
+                      <message><![CDATA[this is Ignored test from ClassLibrary3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                  <test-case name="ClassLibrary3.Tests.Inconclusive" executed="True" result="Inconclusive" success="False" time="0.003" asserts="0">
+                    <reason>
+                      <message><![CDATA[this is Inconclusive test from ClassLibrary3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                  <test-case name="ClassLibrary3.Tests.Passed" executed="True" result="Success" success="True" time="0.004" asserts="0">
+                    <reason>
+                      <message><![CDATA[this is Passed test from ClassLibrary3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="Assembly" name="C:\Users\astral\Documents\GitHub\nunit-split-runner\Solution\NUnitSplitRunnerSpecification\bin\Debug\ClassLibrary4.dll" executed="True" result="Failure" success="False" time="0.095" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="ClassLibrary4" executed="True" result="Failure" success="False" time="0.075" asserts="0">
+            <results>
+              <test-suite type="TestFixture" name="Tests" executed="True" result="Failure" success="False" time="0.073" asserts="0">
+                <results>
+                  <test-case name="ClassLibrary4.Tests.Failed" executed="True" result="Failure" success="False" time="0.036" asserts="0">
+                    <failure>
+                      <message><![CDATA[this is Failed test from ClassLibrary4, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                      <stack-trace><![CDATA[w ClassLibrary4.Tests.Failed() w c:\Users\astral\Documents\GitHub\nunit-split-runner\Solution\ClassLibrary4\Tests.cs:wiersz 17
+]]></stack-trace>
+                    </failure>
+                  </test-case>
+                  <test-case name="ClassLibrary4.Tests.Ignored" executed="False" result="Ignored">
+                    <reason>
+                      <message><![CDATA[this is Ignored test from ClassLibrary4, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                  <test-case name="ClassLibrary4.Tests.Inconclusive" executed="True" result="Inconclusive" success="False" time="0.002" asserts="0">
+                    <reason>
+                      <message><![CDATA[this is Inconclusive test from ClassLibrary4, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                  <test-case name="ClassLibrary4.Tests.Passed" executed="True" result="Success" success="True" time="0.003" asserts="0">
+                    <reason>
+                      <message><![CDATA[this is Passed test from ClassLibrary4, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="Assembly" name="C:\Users\astral\Documents\GitHub\nunit-split-runner\Solution\NUnitSplitRunnerSpecification\bin\Debug\ClassLibrary5.dll" executed="True" result="Failure" success="False" time="0.095" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="ClassLibrary5" executed="True" result="Failure" success="False" time="0.078" asserts="0">
+            <results>
+              <test-suite type="TestFixture" name="Tests" executed="True" result="Failure" success="False" time="0.076" asserts="0">
+                <results>
+                  <test-case name="ClassLibrary5.Tests.Failed" executed="True" result="Failure" success="False" time="0.040" asserts="0">
+                    <failure>
+                      <message><![CDATA[this is Failed test from ClassLibrary5, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                      <stack-trace><![CDATA[w ClassLibrary5.Tests.Failed() w c:\Users\astral\Documents\GitHub\nunit-split-runner\Solution\ClassLibrary5\Tests.cs:wiersz 17
+]]></stack-trace>
+                    </failure>
+                  </test-case>
+                  <test-case name="ClassLibrary5.Tests.Ignored" executed="False" result="Ignored">
+                    <reason>
+                      <message><![CDATA[this is Ignored test from ClassLibrary5, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                  <test-case name="ClassLibrary5.Tests.Inconclusive" executed="True" result="Inconclusive" success="False" time="0.003" asserts="0">
+                    <reason>
+                      <message><![CDATA[this is Inconclusive test from ClassLibrary5, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                  <test-case name="ClassLibrary5.Tests.Passed" executed="True" result="Success" success="True" time="0.003" asserts="0">
+                    <reason>
+                      <message><![CDATA[this is Passed test from ClassLibrary5, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]></message>
+                    </reason>
+                  </test-case>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>
