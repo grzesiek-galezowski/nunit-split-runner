@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Xml.Linq;
-using FluentAssertions;
 using NUnitReportMerge;
 
 namespace NUnitSplitRunner
@@ -70,20 +67,6 @@ namespace NUnitSplitRunner
       {
         Console.Error.WriteLine("ERROR: Merge failed due to: " + e);
         throw;
-      }
-    }
-
-    private static void Compare(XElement originalResult, XElement portedResult)
-    {
-      var originalLines = originalResult.ToString().Split(new[] {"\r\n"}, StringSplitOptions.RemoveEmptyEntries);
-      var portedLines = portedResult.ToString().Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-      portedLines.Length.Should().Be(originalLines.Length);
-
-      for(var i = 0 ; i < originalLines.Length ; ++i)
-      {
-        Console.WriteLine(i + "/" + originalLines.Length);
-        portedLines[i].Should().Be(originalLines[i]);
       }
     }
 
