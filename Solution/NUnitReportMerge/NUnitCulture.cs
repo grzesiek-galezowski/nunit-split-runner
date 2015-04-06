@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace NUnitReportMerge
@@ -7,7 +6,7 @@ namespace NUnitReportMerge
   public class NUnitCulture
   {
     public string CurrentCulture { private get; set; }
-    public String CurrentUiCulture { private get; set; }
+    public string CurrentUiCulture { private get; set; }
 
     public XElement Xml()
     {
