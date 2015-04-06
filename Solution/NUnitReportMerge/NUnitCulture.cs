@@ -1,25 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace NUnitReportMerge
 {
   public class NUnitCulture
   {
-    private string CurrentCulture { get; set; }
-    private String CurrentUiCulture { get; set; }
-
-    public static NUnitCulture ExtractFrom(XDocument xDoc)
-    {
-      var cultureElement = xDoc.Element("test-results").Element("culture-info");
-
-      var culture = new NUnitCulture
-      {
-        CurrentCulture = cultureElement.Attribute("current-culture").Value,
-        CurrentUiCulture = cultureElement.Attribute("current-uiculture").Value
-      };
-
-      return culture;
-    }
+    public string CurrentCulture { private get; set; }
+    public String CurrentUiCulture { private get; set; }
 
     public XElement Xml()
     {

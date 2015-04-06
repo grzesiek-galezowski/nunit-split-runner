@@ -46,7 +46,7 @@ namespace NUnitSplitRunner
       Handle(exitCode);
     }
 
-    public static void Handle(int exitCode)
+    private static void Handle(int exitCode)
     {
       Console.WriteLine("Exit code: " + exitCode);
       if (IsError(exitCode) && ThereWasNoErrorYet())

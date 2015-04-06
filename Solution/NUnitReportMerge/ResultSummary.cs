@@ -57,13 +57,5 @@ namespace NUnitReportMerge
     {
       return XmlCulture.GetInt(_element.Attribute("total").Value);
     }
-
-    public static ResultSummary ExtractFrom(XDocument xdoc)
-    {
-      var element = xdoc.Element("test-results");
-
-      var nUnitTestResults = new ResultSummary(element);
-      return nUnitTestResults;
-    }
   }
 }

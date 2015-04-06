@@ -4,32 +4,14 @@ namespace NUnitReportMerge
 {
   public class NUnitEnvironment
   {
-    private string NUnitVersion { get; set; }
-    private string ClrVersion { get; set; }
-    private string OsVersion { get; set; }
-    private string Platform { get; set; }
-    private string Cwd { get; set; }
-    private string MachineName { get; set; }
-    private string User { get; set; }
-    private string UserDomain { get; set; }
-
-    public static NUnitEnvironment ExtractFrom(XDocument xDoc)
-    {
-      var env = TestResultsEnvironment.ExtractFrom(xDoc);
-      var actualEnv = new NUnitEnvironment
-      {
-        NUnitVersion = env.NUnitVersion(),
-        ClrVersion = env.ClrVersion(),
-        OsVersion = env.OsVersion(),
-        Platform = env.PlatformVersion(),
-        Cwd = env.Cwd(),
-        MachineName = env.MachineName(),
-        User = env.User(),
-        UserDomain = env.UserDomain()
-      };
-
-      return actualEnv;
-    }
+    public string NUnitVersion { get; set; }
+    public string ClrVersion { get; set; }
+    public string OsVersion { get; set; }
+    public string Platform { get; set; }
+    public string Cwd { get; set; }
+    public string MachineName { get; set; }
+    public string User { get; set; }
+    public string UserDomain { get; set; }
 
     public XElement Xml()
     {

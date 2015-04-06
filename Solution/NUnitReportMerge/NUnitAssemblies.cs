@@ -8,15 +8,11 @@ namespace NUnitReportMerge
 {
   public class NUnitAssemblies
   {
-    public NUnitAssemblies UnionWithOthers(NUnitAssemblies nUnitAssemblies)
+    public NUnitAssemblies UnionWith(NUnitAssemblies nUnitAssemblies)
     {
       return new NUnitAssemblies(_assemblies.Union(nUnitAssemblies._assemblies));
     }
 
-    public static NUnitAssemblies From(XDocument xDoc)
-    {
-      return new NUnitAssemblies(xDoc.Descendants().Where(el => el.Name == "test-suite" && el.Attribute("type").Value == "Assembly"));
-    }
     public NUnitAssemblies(IEnumerable<XElement> assemblies)
     {
       _assemblies = assemblies;
@@ -49,7 +45,7 @@ namespace NUnitReportMerge
     }
 
 
-    private Tuple<string, double, int> FoldAssemblyToProjectTuple(
+    private static Tuple<string, double, int> FoldAssemblyToProjectTuple(
       Tuple<string, double, int> aggregatedValue, XElement assembly)
     {
       var result = aggregatedValue.Item1;

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<test-results name="Merged results" total="27" errors="0" failures="6" not-run="6" inconclusive="6" skipped="0" invalid="0" date="2014-12-28" time="00:00:49">
+<test-results name="Merged results" total="27" errors="0" failures="9" not-run="9" inconclusive="9" skipped="0" invalid="0" date="2014-12-28" time="00:00:49">
   <environment nunit-version="2.6.4.14350" clr-version="2.0.50727.8009" os-version="Microsoft Windows NT 6.2.9200.0" platform="Win32NT" cwd="C:\Users\astral\Documents\GitHub\nunit-split-runner\Solution\NUnitSplitRunnerSpecification\bin\Debug" machine-name="JERUSALEM" user="astral" user-domain="JERUSALEM" />
   <culture-info current-culture="pl-PL" current-uiculture="pl-PL" />
   <test-suite type="Test Project" name="" executed="True" result="Failure" time="0.656000" asserts="0">

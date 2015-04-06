@@ -6,34 +6,15 @@ namespace NUnitReportMerge
 {
   public class NUnitResultSummary
   {
-    private int Total { get; set; }
-    private int Errors { get; set; }
-    private int Failures { get; set; }
-    private int NotRun { get; set; }
-    private int Inconclusive { get; set; }
-    private int Ignored { get; set; }
-    private int Skipped { get; set; }
-    private int Invalid { get; set; }
-    private DateTime DateTime { get; set; }
-
-    public static NUnitResultSummary From(XDocument xdoc)
-    {
-      var nUnitTestResults = ResultSummary.ExtractFrom(xdoc);
-      
-      var resultSummary = new NUnitResultSummary
-      {
-        Total = nUnitTestResults.Total(),
-        Errors = nUnitTestResults.Errors(),
-        Failures = nUnitTestResults.Failures(),
-        NotRun = nUnitTestResults.NotRun(),
-        Inconclusive = nUnitTestResults.Inconclusive(),
-        Ignored = nUnitTestResults.Ignored(),
-        Skipped = nUnitTestResults.Skipped(),
-        Invalid = nUnitTestResults.Invalid(),
-        DateTime = nUnitTestResults.DateTimeValue()
-      };
-      return resultSummary;
-    }
+    public int Total { get; set; }
+    public int Errors { get; set; }
+    public int Failures { get; set; }
+    public int NotRun { get; set; }
+    public int Inconclusive { get; set; }
+    public int Ignored { get; set; }
+    public int Skipped { get; set; }
+    public int Invalid { get; set; }
+    public DateTime DateTime { get; set; }
 
     public NUnitResultSummary MergeWith(NUnitResultSummary summary)
     {

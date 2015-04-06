@@ -7,22 +7,23 @@ namespace NUnitReportMerge
 {
   public class NUnitReport
   {
-    public static Tuple<NUnitResultSummary, NUnitEnvironment, NUnitCulture, NUnitAssemblies> Fold(IEnumerable<XDocument> docs)
+    public static Tuple<NUnitResultSummary, NUnitEnvironment, NUnitCulture, NUnitAssemblies> Fold(IEnumerable<ReportDocument> docs)
     {
-      var xDocument = docs.First();
+      var report = docs.First();
 
-      var resultSummary = NUnitResultSummary.From(xDocument);
-      var environment = NUnitEnvironment.ExtractFrom(xDocument);
-      var culture = NUnitCulture.ExtractFrom(xDocument);
+      var resultSummary = report.NUnitSummary();
+      var environment = report.Environment();
+      var culture = report.Culture();
       var noElementsAtFirst = new NUnitAssemblies(Enumerable.Empty<XElement>());
 
       var state = Tuple.Create(resultSummary, environment, culture, noElementsAtFirst);
 
-      return docs.Aggregate(state, Folder);
+      return docs
+        .Aggregate(state, Folder);
     }
 
     private static Tuple<NUnitResultSummary, NUnitEnvironment, NUnitCulture, NUnitAssemblies> Folder(
-      Tuple<NUnitResultSummary, NUnitEnvironment, NUnitCulture, NUnitAssemblies> state, XDocument xDoc)
+      Tuple<NUnitResultSummary, NUnitEnvironment, NUnitCulture, NUnitAssemblies> state, ReportDocument xDoc)
     {
       var currentSummary = state.Item1;
       var nUnitEnvironment = state.Item2;
@@ -32,10 +33,10 @@ namespace NUnitReportMerge
       Validations.CheckReportsCoherence(xDoc, nUnitEnvironment, nUnitCulture);
 
       return Tuple.Create(
-        NUnitResultSummary.From(xDoc).MergeWith(currentSummary),
+        xDoc.NUnitSummary().MergeWith(currentSummary),
         nUnitEnvironment,
         nUnitCulture,
-        assemblies.UnionWithOthers(NUnitAssemblies.From(xDoc)));
+        assemblies.UnionWith(xDoc.Assemblies()));
     }
   }
 }

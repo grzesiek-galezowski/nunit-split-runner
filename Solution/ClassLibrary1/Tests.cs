@@ -16,6 +16,7 @@ namespace ClassLibrary1
       {
         Assert.Fail(Message(MethodBase.GetCurrentMethod().Name));
       }
+
       [Test]
       public void Passed()
       {

@@ -5,10 +5,10 @@ namespace NUnitReportMerge
 {
   static internal class Validations
   {
-    public static void CheckReportsCoherence(XDocument xDoc, NUnitEnvironment nUnitEnvironment, NUnitCulture nUnitCulture)
+    public static void CheckReportsCoherence(ReportDocument xDoc, NUnitEnvironment nUnitEnvironment, NUnitCulture nUnitCulture)
     {
 // Sanity check!
-      if (nUnitEnvironment != (NUnitEnvironment.ExtractFrom(xDoc)) || nUnitCulture != (NUnitCulture.ExtractFrom(xDoc)))
+      if (nUnitEnvironment != (xDoc.Environment()) || nUnitCulture != (xDoc.Culture()))
       {
         Console.WriteLine(
           "Unmatched environment and/or cultures detected: some of theses results files are not from the same test run.");

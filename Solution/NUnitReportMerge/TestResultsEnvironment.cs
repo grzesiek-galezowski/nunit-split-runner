@@ -50,10 +50,5 @@ namespace NUnitReportMerge
     {
       return _env.Attribute("nunit-version").Value;
     }
-
-    public static TestResultsEnvironment ExtractFrom(XDocument xDoc)
-    {
-      return new TestResultsEnvironment(xDoc.Element("test-results").Element("environment"));
-    }
   }
 }

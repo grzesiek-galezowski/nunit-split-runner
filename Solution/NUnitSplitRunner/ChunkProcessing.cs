@@ -70,7 +70,7 @@ namespace NUnitSplitRunner
       }
     }
 
-    private static XElement CreateMergedReport(IEnumerable<XDocument> list)
+    private static XElement CreateMergedReport(IEnumerable<ReportDocument> list)
     {
       var tuple = NUnitReport.Fold(list);
       var result = Merge.ApplyTo(tuple);
