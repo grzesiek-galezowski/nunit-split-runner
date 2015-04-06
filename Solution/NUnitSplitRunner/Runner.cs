@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 namespace NUnitSplitRunner
@@ -8,7 +9,12 @@ namespace NUnitSplitRunner
     private static void Main(string[] args)
     {
       var runner = new Runner();
-      runner.Run(args, 10);
+      runner.Run(args, LoadMaxAllowedAssemblyCountPerRun());
+    }
+
+    private static int LoadMaxAllowedAssemblyCountPerRun()
+    {
+      return int.Parse(ConfigurationManager.AppSettings["MaxAssemblyCountPerRun"]);
     }
 
     public void Run(string[] args, int allowedAssemblyCount)

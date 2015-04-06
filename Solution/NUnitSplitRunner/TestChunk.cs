@@ -5,31 +5,9 @@ using System.IO;
 
 namespace NUnitSplitRunner
 {
-  public class TestChunkFactory
-  {
-    readonly string _partialDirName;
-    readonly int _allowedAssemblyCount;
-
-    public TestChunkFactory(int allowedAssemblyCount, string partialDirName)
-    {
-      _allowedAssemblyCount = allowedAssemblyCount;
-      _partialDirName = partialDirName;
-    }
-
-    public TestChunk CreateChunkFollowing(TestChunk currentChunk)
-    {
-      return new TestChunk(currentChunk.RunId + 1, _partialDirName, _allowedAssemblyCount);
-    }
-
-    public TestChunk CreateInitialChunk()
-    {
-      return new TestChunk(1, _partialDirName, _allowedAssemblyCount);
-    }
-    
-  }
   public class TestChunk
   {
-    public readonly int RunId;
+    public int RunId { get; set; }
     readonly string _partialDirName;
     readonly List<string> _dlls = new List<string>();
     readonly int _allowedAssemblyCount;
@@ -54,7 +32,7 @@ namespace NUnitSplitRunner
     public bool IsFilled()
     {
       
-      return _dlls.Count >= _allowedAssemblyCount;
+      return _dlls.Count > _allowedAssemblyCount;
     }
 
     public bool IsEmpty()
