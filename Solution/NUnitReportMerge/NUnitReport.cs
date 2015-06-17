@@ -32,6 +32,7 @@ namespace NUnitReportMerge
 
       Validations.CheckReportsCoherence(xDoc, nUnitEnvironment, nUnitCulture);
 
+      Console.WriteLine("Merging " + xDoc.NUnitSummary().Total + " existing tests with  " + currentSummary.Total);
       return Tuple.Create(
         xDoc.NUnitSummary().MergeWith(currentSummary),
         nUnitEnvironment,

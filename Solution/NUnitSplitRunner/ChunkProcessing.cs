@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using NUnitReportMerge;
 
@@ -16,20 +17,18 @@ namespace NUnitSplitRunner
       _testChunkFactory = testChunkFactory;
     }
 
-    private static void RunNotFullAndNotEmptyChunk(
-      TestChunk currentChunk, 
-      string processName, 
-      CommandlineArguments commandline)
+    public const string PartialDirName = "partial";
+    public const string InputPattern = "*.xml";
+    public const string OutputPath = "TestResult.xml";
+
+    public void Execute(IEnumerable<string> dlls, CommandlineArguments commandline)
     {
-      if (!currentChunk.IsEmpty())
-      {
-        Console.WriteLine("One last run...");
-        currentChunk.PerformNunitRun(processName, commandline);
-      }
+      RunAllChunks(dlls, commandline);
     }
 
-    private TestChunk RunFullTestAssemblyChunks(IEnumerable<string> dlls, string processName, CommandlineArguments commandline)
+    private void RunAllChunks(IEnumerable<string> dlls, CommandlineArguments commandline)
     {
+      var chunks = new List<ITestChunk>();
       var currentChunk = _testChunkFactory.CreateInitialChunk();
       foreach (var dll in dlls)
       {
@@ -37,21 +36,21 @@ namespace NUnitSplitRunner
 
         if (currentChunk.IsFilled())
         {
-          currentChunk.PerformNunitRun(processName, commandline);
+          chunks.Add(currentChunk);
           currentChunk = _testChunkFactory.CreateChunkFollowing(currentChunk);
         }
       }
-      return currentChunk;
-    }
 
-    public const string PartialDirName = "partial";
-    public const string InputPattern = "*.xml";
-    public const string OutputPath = "TestResult.xml";
+      if (!currentChunk.IsEmpty())
+      {
+        chunks.Add(new LastTestChunk(currentChunk));
+      }
 
-    public void Execute(IEnumerable<string> dlls, CommandlineArguments commandline)
-    {
-      var currentChunk = RunFullTestAssemblyChunks(dlls, _processPath, commandline);
-      RunNotFullAndNotEmptyChunk(currentChunk, _processPath, commandline);
+      /*foreach (var action in chunks)
+      {
+        action.PerformNunitRun(_processPath, commandline);
+      }*/
+      Parallel.ForEach(chunks, chunk => chunk.PerformNunitRun(_processPath, commandline));
     }
 
     public void MergeReports(string partialDirName, string searchPattern, string testresultXml)
@@ -75,6 +74,22 @@ namespace NUnitSplitRunner
       var tuple = NUnitReport.Fold(list);
       var result = Merge.ApplyTo(tuple);
       return result;
+    }
+  }
+
+  class LastTestChunk : ITestChunk
+  {
+    private readonly ITestChunk _chunk;
+
+    public LastTestChunk(ITestChunk chunk)
+    {
+      _chunk = chunk;
+    }
+
+    public void PerformNunitRun(string processName, CommandlineArguments commandline)
+    {
+      Console.WriteLine("One last run...");
+      _chunk.PerformNunitRun(processName, commandline);
     }
   }
 }

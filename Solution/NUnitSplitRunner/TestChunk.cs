@@ -5,7 +5,12 @@ using System.IO;
 
 namespace NUnitSplitRunner
 {
-  public class TestChunk
+  public interface ITestChunk
+  {
+    void PerformNunitRun(string processName, CommandlineArguments commandline);
+  }
+
+  public class TestChunk : ITestChunk
   {
     public int RunId { get; set; }
     readonly string _partialDirName;
@@ -32,7 +37,7 @@ namespace NUnitSplitRunner
     public bool IsFilled()
     {
       
-      return _dlls.Count > _allowedAssemblyCount;
+      return _dlls.Count >= _allowedAssemblyCount;
     }
 
     public bool IsEmpty()
@@ -68,7 +73,7 @@ namespace NUnitSplitRunner
 
     public int RunCommand(string processName, CommandlineArguments commandline)
     {
-      var arguments = commandline + " " + this;
+      var arguments = commandline + " " + this.ToString();
       Console.WriteLine("Running " + processName + " with: " + arguments);
 
       using (var process = CreateNUnitProcess(processName, arguments))

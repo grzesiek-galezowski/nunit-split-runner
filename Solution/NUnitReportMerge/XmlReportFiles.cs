@@ -11,7 +11,8 @@ namespace NUnitReportMerge
     {
       var files = Directory.GetFiles(directory, filter, SearchOption.AllDirectories);
       Console.WriteLine("Found reports: " + String.Join(", ", files));
-      return files.Select(fileName => XDocument.Parse(File.ReadAllText(fileName))).Select(d => new ReportDocument(d)).ToArray();
+      return files.Select(fileName => XDocument.Parse(File.ReadAllText(fileName)))
+        .Select(d => new ReportDocument(d)).ToArray();
     }
   }
 }
