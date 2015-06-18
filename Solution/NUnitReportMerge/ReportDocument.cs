@@ -49,6 +49,7 @@ namespace NUnitReportMerge
       
       var resultSummary = new NUnitResultSummary
       {
+        //bug shouldn't be 0 everywhere?
         Total = nUnitTestResults.Total(),
         Errors = nUnitTestResults.Errors(),
         Failures = nUnitTestResults.Failures(),

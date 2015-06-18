@@ -23,12 +23,13 @@ namespace NUnitSplitRunner
       var processName = args[0];
       var dlls = new List<string>();
       var commandline = new CommandlineArguments();
-      var stringStreamOutputBuilder = new StringStreamOutputBuilder();
+      var stringStreamOutputBuilder = new AllStandardOutputThenErrorBuilder();
       var chunkProcessing = new ChunkProcessing(processName, new TestChunkFactory(allowedAssemblyCount, ChunkProcessing.PartialDirName, stringStreamOutputBuilder));
 
       Parse(args, dlls, commandline);
       chunkProcessing.Execute(dlls, commandline);
-      Console.WriteLine(stringStreamOutputBuilder.ToString()); //bug add more info like command arguments etc.
+      Console.WriteLine(stringStreamOutputBuilder.Output());
+      Console.Error.WriteLine(stringStreamOutputBuilder.Errors());
       chunkProcessing.MergeReports(ChunkProcessing.PartialDirName, ChunkProcessing.InputPattern, ChunkProcessing.OutputPath);
     }
 

@@ -82,8 +82,7 @@ namespace NUnitSplitRunner
       {
         process.Start();
         process.WaitForExit();
-        _outputBuilder.Add(process.StandardOutput);
-        _outputBuilder.Add(process.StandardError);
+        _outputBuilder.Add(arguments, process.StandardOutput, process.StandardError);
         return process.ExitCode;
       }
     }
@@ -104,26 +103,6 @@ namespace NUnitSplitRunner
               RedirectStandardOutput = true
             },
         };
-    }
-  }
-
-  public interface OutputBuilder
-  {
-    void Add(StreamReader stream);
-  }
-
-  public class StringStreamOutputBuilder : OutputBuilder
-  {
-    private string _content;
-
-    public void Add(StreamReader stream)
-    {
-      _content += stream.ReadToEnd();
-    }
-
-    public override string ToString()
-    {
-      return _content;
     }
   }
 }
