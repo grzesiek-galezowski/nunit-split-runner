@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 
@@ -22,10 +23,12 @@ namespace NUnitSplitRunner
       var processName = args[0];
       var dlls = new List<string>();
       var commandline = new CommandlineArguments();
-      var chunkProcessing = new ChunkProcessing(processName, new TestChunkFactory(allowedAssemblyCount, ChunkProcessing.PartialDirName));
+      var stringStreamOutputBuilder = new StringStreamOutputBuilder();
+      var chunkProcessing = new ChunkProcessing(processName, new TestChunkFactory(allowedAssemblyCount, ChunkProcessing.PartialDirName, stringStreamOutputBuilder));
 
       Parse(args, dlls, commandline);
       chunkProcessing.Execute(dlls, commandline);
+      Console.WriteLine(stringStreamOutputBuilder.ToString()); //bug add more info like command arguments etc.
       chunkProcessing.MergeReports(ChunkProcessing.PartialDirName, ChunkProcessing.InputPattern, ChunkProcessing.OutputPath);
     }
 

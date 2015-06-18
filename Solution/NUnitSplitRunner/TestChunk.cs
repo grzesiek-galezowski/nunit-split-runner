@@ -16,12 +16,14 @@ namespace NUnitSplitRunner
     readonly string _partialDirName;
     readonly List<string> _dlls = new List<string>();
     readonly int _allowedAssemblyCount;
+    private readonly OutputBuilder _outputBuilder;
 
-    public TestChunk(int runId, string partialDirName, int allowedAssemblyCount)
+    public TestChunk(int runId, string partialDirName, int allowedAssemblyCount, OutputBuilder outputBuilder)
     {
       RunId = runId;
       _partialDirName = partialDirName;
       _allowedAssemblyCount = allowedAssemblyCount;
+      _outputBuilder = outputBuilder;
     }
 
     public void Add(string element)
@@ -80,6 +82,8 @@ namespace NUnitSplitRunner
       {
         process.Start();
         process.WaitForExit();
+        _outputBuilder.Add(process.StandardOutput);
+        _outputBuilder.Add(process.StandardError);
         return process.ExitCode;
       }
     }
@@ -95,9 +99,31 @@ namespace NUnitSplitRunner
               FileName = processName,
               Arguments = arguments + " " + "/xml:" + _partialDirName + "\\nunit-partial-run-" + this.RunId + ".xml",
               UseShellExecute = false,
-              Domain = Process.GetCurrentProcess().StartInfo.Domain
-            }
+              Domain = Process.GetCurrentProcess().StartInfo.Domain,
+              RedirectStandardError = true,
+              RedirectStandardOutput = true
+            },
         };
+    }
+  }
+
+  public interface OutputBuilder
+  {
+    void Add(StreamReader stream);
+  }
+
+  public class StringStreamOutputBuilder : OutputBuilder
+  {
+    private string _content;
+
+    public void Add(StreamReader stream)
+    {
+      _content += stream.ReadToEnd();
+    }
+
+    public override string ToString()
+    {
+      return _content;
     }
   }
 }
