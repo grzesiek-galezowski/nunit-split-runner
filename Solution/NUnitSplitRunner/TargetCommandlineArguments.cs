@@ -1,6 +1,6 @@
 ﻿namespace NUnitSplitRunner
 {
-  public class CommandlineArguments
+  public class TargetCommandlineArguments
   {
     private string _content = string.Empty;
 

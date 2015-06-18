@@ -11,10 +11,10 @@ namespace NUnitSplitRunner
       _chunk = chunk;
     }
 
-    public void PerformNunitRun(string processName, CommandlineArguments commandline)
+    public void PerformNunitRun(string processName, TargetCommandlineArguments targetCommandline)
     {
       Console.WriteLine("One last run...");
-      _chunk.PerformNunitRun(processName, commandline);
+      _chunk.PerformNunitRun(processName, targetCommandline);
     }
   }
 }

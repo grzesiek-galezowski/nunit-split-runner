@@ -21,36 +21,27 @@ namespace NUnitSplitRunner
     public void Run(string[] args, int allowedAssemblyCount)
     {
       var processName = args[0];
-      var dlls = new List<string>();
-      var commandline = new CommandlineArguments();
+      var programArguments = new ProgramArguments(args);
+      var commandline = new TargetCommandlineArguments();
       var stringStreamOutputBuilder = new AllStandardOutputThenErrorBuilder();
-      var chunkProcessing = new ChunkProcessing(processName, new TestChunkFactory(allowedAssemblyCount, ChunkProcessing.PartialDirName, stringStreamOutputBuilder));
+      var testChunkFactory = new TestChunkFactory(allowedAssemblyCount, ChunkProcessing.PartialDirName, stringStreamOutputBuilder);
+      var chunkProcessing = new ChunkProcessing(processName, testChunkFactory, 2);
 
-      Parse(args, dlls, commandline);
+      var dlls = new List<string>();
+
+      Process(programArguments, dlls, commandline, chunkProcessing, stringStreamOutputBuilder);
+    }
+
+    private static void Process(ProgramArguments programArguments, List<string> dlls, TargetCommandlineArguments commandline,
+      ChunkProcessing chunkProcessing, AllStandardOutputThenErrorBuilder stringStreamOutputBuilder)
+    {
+      programArguments.SplitInto(dlls, commandline);
       chunkProcessing.Execute(dlls, commandline);
+      
       Console.WriteLine(stringStreamOutputBuilder.Output());
       Console.Error.WriteLine(stringStreamOutputBuilder.Errors());
+
       chunkProcessing.MergeReports(ChunkProcessing.PartialDirName, ChunkProcessing.InputPattern, ChunkProcessing.OutputPath);
-    }
-
-    private static void Parse(IEnumerable<string> args, List<string> dlls, CommandlineArguments commandline)
-    {
-      foreach (var arg in args.Skip(1))
-      {
-        if (IsAssemblyPath(arg))
-        {
-          dlls.Add(arg);
-        }
-        else
-        {
-          commandline.Add(arg);
-        }
-      }
-    }
-
-    private static bool IsAssemblyPath(string arg)
-    {
-      return arg.EndsWith(".dll");
     }
   }
 }

@@ -10,23 +10,25 @@ namespace NUnitSplitRunner
   {
     readonly string _processPath;
     private readonly TestChunkFactory _testChunkFactory;
+    private readonly int _maxDegreeOfParallelism;
 
-    public ChunkProcessing(string processPath, TestChunkFactory testChunkFactory)
+    public ChunkProcessing(string processPath, TestChunkFactory testChunkFactory, int maxDegreeOfParallelism)
     {
       _processPath = processPath;
       _testChunkFactory = testChunkFactory;
+      _maxDegreeOfParallelism = maxDegreeOfParallelism;
     }
 
     public const string PartialDirName = "partial";
     public const string InputPattern = "*.xml";
     public const string OutputPath = "TestResult.xml";
 
-    public void Execute(IEnumerable<string> dlls, CommandlineArguments commandline)
+    public void Execute(IEnumerable<string> dlls, TargetCommandlineArguments targetCommandline)
     {
-      RunAllChunks(dlls, commandline);
+      RunAllChunks(dlls, targetCommandline);
     }
 
-    private void RunAllChunks(IEnumerable<string> dlls, CommandlineArguments commandline)
+    private void RunAllChunks(IEnumerable<string> dlls, TargetCommandlineArguments targetCommandline)
     {
       var chunks = new List<ITestChunk>();
       var currentChunk = _testChunkFactory.CreateInitialChunk();
@@ -46,11 +48,12 @@ namespace NUnitSplitRunner
         chunks.Add(new LastTestChunk(currentChunk));
       }
 
-      /*foreach (var action in chunks)
-      {
-        action.PerformNunitRun(_processPath, commandline);
-      }*/
-      Parallel.ForEach(chunks, chunk => chunk.PerformNunitRun(_processPath, commandline));
+      Parallel.ForEach(chunks, LoopConfig(), chunk => chunk.PerformNunitRun(_processPath, targetCommandline));
+    }
+
+    private static ParallelOptions LoopConfig()
+    {
+      return new ParallelOptions() { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
     }
 
     public void MergeReports(string partialDirName, string searchPattern, string testresultXml)
