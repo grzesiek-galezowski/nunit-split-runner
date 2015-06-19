@@ -7,7 +7,7 @@ namespace NUnitSplitRunner
 {
   public interface ITestChunk
   {
-    void PerformNunitRun(string processName, TargetCommandlineArguments targetCommandline);
+    void PerformNunitRun(string processName, RealRunnerInvocationOptions realRunnerInvocationOptions);
   }
 
   public class TestChunk : ITestChunk
@@ -47,9 +47,9 @@ namespace NUnitSplitRunner
       return _dlls.Count == 0;
     }
 
-    public void PerformNunitRun(string processName, TargetCommandlineArguments targetCommandline)
+    public void PerformNunitRun(string processName, RealRunnerInvocationOptions realRunnerInvocationOptions)
     {
-      var exitCode = RunCommand(processName, targetCommandline);
+      var exitCode = RunCommand(processName, realRunnerInvocationOptions);
       Handle(exitCode);
     }
 
@@ -73,9 +73,9 @@ namespace NUnitSplitRunner
       return exitCode != 0;
     }
 
-    public int RunCommand(string processName, TargetCommandlineArguments targetCommandline)
+    public int RunCommand(string processName, RealRunnerInvocationOptions remainingTargetCommandline)
     {
-      var arguments = targetCommandline + " " + this.ToString();
+      var arguments = remainingTargetCommandline + " " + this.ToString();
       Console.WriteLine("Running " + processName + " with: " + arguments);
 
       using (var process = CreateNUnitProcess(processName, arguments))

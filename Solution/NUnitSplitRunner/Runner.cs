@@ -22,7 +22,7 @@ namespace NUnitSplitRunner
     {
       var processName = args[0];
       var programArguments = new ProgramArguments(args);
-      var commandline = new TargetCommandlineArguments();
+      var commandline = new RealRunnerInvocationOptions();
       var stringStreamOutputBuilder = new AllStandardOutputThenErrorBuilder();
       var testChunkFactory = new TestChunkFactory(allowedAssemblyCount, ChunkProcessing.PartialDirName, stringStreamOutputBuilder);
       var chunkProcessing = new ChunkProcessing(processName, testChunkFactory, 2);
@@ -32,7 +32,7 @@ namespace NUnitSplitRunner
       Process(programArguments, dlls, commandline, chunkProcessing, stringStreamOutputBuilder);
     }
 
-    private static void Process(ProgramArguments programArguments, List<string> dlls, TargetCommandlineArguments commandline,
+    private static void Process(ProgramArguments programArguments, List<string> dlls, RealRunnerInvocationOptions commandline,
       ChunkProcessing chunkProcessing, AllStandardOutputThenErrorBuilder stringStreamOutputBuilder)
     {
       programArguments.SplitInto(dlls, commandline);

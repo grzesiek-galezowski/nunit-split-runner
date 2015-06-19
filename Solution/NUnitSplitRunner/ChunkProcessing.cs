@@ -23,12 +23,12 @@ namespace NUnitSplitRunner
     public const string InputPattern = "*.xml";
     public const string OutputPath = "TestResult.xml";
 
-    public void Execute(IEnumerable<string> dlls, TargetCommandlineArguments targetCommandline)
+    public void Execute(IEnumerable<string> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
     {
-      RunAllChunks(dlls, targetCommandline);
+      RunAllChunks(dlls, remainingTargetCommandline);
     }
 
-    private void RunAllChunks(IEnumerable<string> dlls, TargetCommandlineArguments targetCommandline)
+    private void RunAllChunks(IEnumerable<string> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
     {
       var chunks = new List<ITestChunk>();
       var currentChunk = _testChunkFactory.CreateInitialChunk();
@@ -48,7 +48,7 @@ namespace NUnitSplitRunner
         chunks.Add(new LastTestChunk(currentChunk));
       }
 
-      Parallel.ForEach(chunks, LoopConfig(), chunk => chunk.PerformNunitRun(_processPath, targetCommandline));
+      Parallel.ForEach(chunks, LoopConfig(), chunk => chunk.PerformNunitRun(_processPath, remainingTargetCommandline));
     }
 
     private ParallelOptions LoopConfig()

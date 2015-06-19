@@ -16,7 +16,7 @@ internal class ProgramArguments
     return arg.EndsWith(".dll");
   }
 
-  public void SplitInto(ICollection<string> dlls, TargetCommandlineArguments targetCommandline)
+  public void SplitInto(ICollection<string> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
   {
     foreach (var arg in _args.Skip(1))
     {
@@ -26,7 +26,7 @@ internal class ProgramArguments
       }
       else
       {
-        targetCommandline.Add(arg);
+        remainingTargetCommandline.Add(arg);
       }
     }
   }

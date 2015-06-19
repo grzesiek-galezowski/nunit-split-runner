@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace NUnitReportMerge
@@ -46,18 +47,17 @@ namespace NUnitReportMerge
     public NUnitResultSummary NUnitSummary()
     {
       var nUnitTestResults = Summary();
-      
+
       var resultSummary = new NUnitResultSummary
       {
-        //bug shouldn't be 0 everywhere?
-        Total = 0,//nUnitTestResults.Total(),
-        Errors = 0,//nUnitTestResults.Errors(),
-        Failures = 0,//nUnitTestResults.Failures(),
-        NotRun = 0,//nUnitTestResults.NotRun(),
-        Inconclusive = 0,//nUnitTestResults.Inconclusive(),
-        Ignored = 0,//nUnitTestResults.Ignored(),
-        Skipped = 0,//nUnitTestResults.Skipped(),
-        Invalid = 0,//nUnitTestResults.Invalid(),
+        Total = nUnitTestResults.Total(),
+        Errors = nUnitTestResults.Errors(),
+        Failures = nUnitTestResults.Failures(),
+        NotRun = nUnitTestResults.NotRun(),
+        Inconclusive = nUnitTestResults.Inconclusive(),
+        Ignored = nUnitTestResults.Ignored(),
+        Skipped = nUnitTestResults.Skipped(),
+        Invalid = nUnitTestResults.Invalid(),
         DateTime = nUnitTestResults.DateTimeValue()
       };
       return resultSummary;

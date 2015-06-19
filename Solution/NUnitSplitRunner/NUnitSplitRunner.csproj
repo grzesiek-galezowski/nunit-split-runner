@@ -46,7 +46,7 @@
     <Compile Include="AllStandardOutputThenErrorBuilder.cs" />
     <Compile Include="ChunkProcessing.cs" />
     <Compile Include="ProgramArguments.cs" />
-    <Compile Include="TargetCommandlineArguments.cs" />
+    <Compile Include="RealRunnerInvocationOptions.cs" />
     <Compile Include="LastTestChunk.cs" />
     <Compile Include="OutputBuilder.cs" />
     <Compile Include="Runner.cs" />
