@@ -1,32 +1,34 @@
 using System.Collections.Generic;
 using System.Linq;
-using NUnitSplitRunner;
 
-internal class ProgramArguments
+namespace NUnitSplitRunner
 {
-  private IEnumerable<string> _args;
-
-  public ProgramArguments(string[] args)
+  public class ProgramArguments
   {
-    _args = args;
-  }
+    private IEnumerable<string> _args;
 
-  private static bool IsAssemblyPath(string arg)
-  {
-    return arg.EndsWith(".dll");
-  }
-
-  public void SplitInto(ICollection<string> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
-  {
-    foreach (var arg in _args.Skip(1))
+    public ProgramArguments(string[] args)
     {
-      if (IsAssemblyPath(arg))
+      _args = args;
+    }
+
+    private static bool IsAssemblyPath(string arg)
+    {
+      return arg.EndsWith(".dll");
+    }
+
+    public void SplitInto(ICollection<string> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
+    {
+      foreach (var arg in _args.Skip(1))
       {
-        dlls.Add(arg);
-      }
-      else
-      {
-        remainingTargetCommandline.Add(arg);
+        if (IsAssemblyPath(arg))
+        {
+          dlls.Add(arg);
+        }
+        else
+        {
+          remainingTargetCommandline.Add(arg);
+        }
       }
     }
   }

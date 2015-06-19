@@ -5,11 +5,6 @@ using System.IO;
 
 namespace NUnitSplitRunner
 {
-  public interface ITestChunk
-  {
-    void PerformNunitRun(string processName, RealRunnerInvocationOptions realRunnerInvocationOptions);
-  }
-
   public class TestChunk : ITestChunk
   {
     public int RunId { get; set; }

@@ -6,7 +6,7 @@ using NUnitReportMerge;
 
 namespace NUnitSplitRunner
 {
-  internal class ChunkProcessing
+  public class ChunkProcessing
   {
     readonly string _processPath;
     private readonly TestChunkFactory _testChunkFactory;

@@ -39,7 +39,7 @@
   <ItemGroup>
     <Compile Include="Api.cs" />
     <Compile Include="NUnitAssemblies.cs" />
-    <Compile Include="Merge.cs" />
+    <Compile Include="NUnitReport.cs" />
     <Compile Include="NUnitCulture.cs" />
     <Compile Include="NUnitEnvironment.cs" />
     <Compile Include="NUnitReportFactory.cs" />

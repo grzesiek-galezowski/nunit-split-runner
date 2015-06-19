@@ -7,41 +7,41 @@ namespace NUnitSplitRunner
 {
   public class Runner
   {
-    private static void Main(string[] args)
+    private readonly ProgramArguments _programArguments;
+    private readonly RealRunnerInvocationOptions _realRunnerInvocationOptions;
+    private readonly AllStandardOutputThenErrorBuilder _outputBuilder;
+    private readonly ChunkProcessing _chunkProcessing;
+
+    public Runner(
+      ProgramArguments programArguments, 
+      RealRunnerInvocationOptions realRunnerInvocationOptions, 
+      AllStandardOutputThenErrorBuilder outputBuilder, 
+      ChunkProcessing chunkProcessing)
     {
-      var runner = new Runner();
-      runner.Run(args, LoadMaxAllowedAssemblyCountPerRun());
+      _programArguments = programArguments;
+      _realRunnerInvocationOptions = realRunnerInvocationOptions;
+      _outputBuilder = outputBuilder;
+      _chunkProcessing = chunkProcessing;
     }
 
-    private static int LoadMaxAllowedAssemblyCountPerRun()
+    public static Runner Create(string[] args, int maxAllowedAssemblyCountPerRun, string thirdPartyRunnerPath, int maxDegreeOfParallelism)
     {
-      return int.Parse(ConfigurationManager.AppSettings["MaxAssemblyCountPerRun"]);
+      AllStandardOutputThenErrorBuilder outputBuilder = new AllStandardOutputThenErrorBuilder();
+      TestChunkFactory testChunkFactory = new TestChunkFactory(maxAllowedAssemblyCountPerRun, ChunkProcessing.PartialDirName, outputBuilder);
+      return new Runner(new ProgramArguments(args), new RealRunnerInvocationOptions(), outputBuilder, new ChunkProcessing(thirdPartyRunnerPath, testChunkFactory, maxDegreeOfParallelism));
     }
 
-    public void Run(string[] args, int allowedAssemblyCount)
+    public void Run()
     {
-      var processName = args[0];
-      var programArguments = new ProgramArguments(args);
-      var commandline = new RealRunnerInvocationOptions();
-      var stringStreamOutputBuilder = new AllStandardOutputThenErrorBuilder();
-      var testChunkFactory = new TestChunkFactory(allowedAssemblyCount, ChunkProcessing.PartialDirName, stringStreamOutputBuilder);
-      var chunkProcessing = new ChunkProcessing(processName, testChunkFactory, 4);
-
       var dlls = new List<string>();
 
-      Process(programArguments, dlls, commandline, chunkProcessing, stringStreamOutputBuilder);
-    }
-
-    private static void Process(ProgramArguments programArguments, List<string> dlls, RealRunnerInvocationOptions commandline,
-      ChunkProcessing chunkProcessing, AllStandardOutputThenErrorBuilder stringStreamOutputBuilder)
-    {
-      programArguments.SplitInto(dlls, commandline);
-      chunkProcessing.Execute(dlls, commandline);
+      _programArguments.SplitInto(dlls, _realRunnerInvocationOptions);
+      _chunkProcessing.Execute(dlls, _realRunnerInvocationOptions);
       
-      Console.WriteLine(stringStreamOutputBuilder.Output());
-      Console.Error.WriteLine(stringStreamOutputBuilder.Errors());
+      Console.WriteLine(_outputBuilder.Output());
+      Console.Error.WriteLine(_outputBuilder.Errors());
 
-      chunkProcessing.MergeReports(ChunkProcessing.PartialDirName, ChunkProcessing.InputPattern, ChunkProcessing.OutputPath);
+      _chunkProcessing.MergeReports(ChunkProcessing.PartialDirName, ChunkProcessing.InputPattern, ChunkProcessing.OutputPath);
     }
   }
 }
