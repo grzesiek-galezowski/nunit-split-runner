@@ -56,13 +56,14 @@ namespace NUnitSplitRunner
       return new ParallelOptions() { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
     }
 
-    public void MergeReports(string partialDirName, string searchPattern, string testresultXml)
+    public void MergeReports(string partialDirName, string searchPattern, string finalXmlResultPath)
     {
       try
       {
         var list = XmlReportFiles.LoadFrom(partialDirName, searchPattern);
-        var portedResult = CreateMergedReport(list);
-        portedResult.Save(testresultXml);
+        Console.WriteLine("Loaded " + list.Length + " partial files");
+        var result = NUnitReportFactory.CreateFrom(list).MergeAsXml();
+        result.Save(finalXmlResultPath);
         Console.WriteLine("Merge successful");
       }
       catch (Exception e)
@@ -70,13 +71,6 @@ namespace NUnitSplitRunner
         Console.Error.WriteLine("ERROR: Merge failed due to: " + e);
         throw;
       }
-    }
-
-    private static XElement CreateMergedReport(IEnumerable<ReportDocument> list)
-    {
-      var tuple = NUnitReport.Fold(list);
-      var result = Merge.ApplyTo(tuple);
-      return result;
     }
   }
 }

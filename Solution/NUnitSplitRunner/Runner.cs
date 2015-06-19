@@ -25,7 +25,7 @@ namespace NUnitSplitRunner
       var commandline = new RealRunnerInvocationOptions();
       var stringStreamOutputBuilder = new AllStandardOutputThenErrorBuilder();
       var testChunkFactory = new TestChunkFactory(allowedAssemblyCount, ChunkProcessing.PartialDirName, stringStreamOutputBuilder);
-      var chunkProcessing = new ChunkProcessing(processName, testChunkFactory, 2);
+      var chunkProcessing = new ChunkProcessing(processName, testChunkFactory, 4);
 
       var dlls = new List<string>();
 

@@ -5,9 +5,9 @@ using System.Xml.Linq;
 
 namespace NUnitReportMerge
 {
-  public class NUnitReport
+  public class NUnitReportFactory
   {
-    public static Tuple<NUnitResultSummary, NUnitEnvironment, NUnitCulture, NUnitAssemblies> Fold(IEnumerable<ReportDocument> docs)
+    private static Tuple<NUnitResultSummary, NUnitEnvironment, NUnitCulture, NUnitAssemblies> Fold(IEnumerable<ReportDocument> docs)
     {
       var report = docs.First();
 
@@ -38,6 +38,13 @@ namespace NUnitReportMerge
         nUnitEnvironment,
         nUnitCulture,
         assemblies.UnionWith(xDoc.Assemblies()));
+    }
+
+    public static NUnitReport CreateFrom(IEnumerable<ReportDocument> list)
+    {
+      var tuple = Fold(list);
+      var nUnitRunInfo = new NUnitReport(tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4);
+      return nUnitRunInfo;
     }
   }
 }

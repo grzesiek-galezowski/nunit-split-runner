@@ -1,20 +1,48 @@
-using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace NUnitReportMerge
 {
-  public static class Merge
+  public class NUnitReport
   {
-    private static XElement ApplyTo(NUnitResultSummary summary, NUnitEnvironment nUnitEnvironment, NUnitCulture nUnitCulture, NUnitAssemblies assemblies)
+    private readonly NUnitResultSummary _summary;
+    private readonly NUnitEnvironment _nUnitEnvironment;
+    private readonly NUnitCulture _nUnitCulture;
+    private readonly NUnitAssemblies _assemblies;
+
+    public NUnitReport(NUnitResultSummary summary, NUnitEnvironment nUnitEnvironment, NUnitCulture nUnitCulture, NUnitAssemblies assemblies)
     {
-      var results = summary.Xml();
-      results.Add(nUnitEnvironment.Xml(), nUnitCulture.Xml(), assemblies.Xml());
-      return results;
+      _summary = summary;
+      _nUnitEnvironment = nUnitEnvironment;
+      _nUnitCulture = nUnitCulture;
+      _assemblies = assemblies;
     }
 
-    public static XElement ApplyTo(Tuple<NUnitResultSummary, NUnitEnvironment, NUnitCulture, NUnitAssemblies> state)
+    private NUnitResultSummary Summary
     {
-      return ApplyTo(state.Item1, state.Item2, state.Item3, state.Item4);
+      get { return _summary; }
+    }
+
+    private NUnitEnvironment NUnitEnvironment
+    {
+      get { return _nUnitEnvironment; }
+    }
+
+    private NUnitCulture NUnitCulture
+    {
+      get { return _nUnitCulture; }
+    }
+
+    private NUnitAssemblies Assemblies
+    {
+      get { return _assemblies; }
+    }
+
+    public XElement MergeAsXml()
+    {
+      var results = Summary.Xml();
+      results.Add(NUnitEnvironment.Xml(), NUnitCulture.Xml(), Assemblies.Xml());
+      return results;
     }
   }
 }
