@@ -50,14 +50,14 @@ namespace NUnitReportMerge
       var resultSummary = new NUnitResultSummary
       {
         //bug shouldn't be 0 everywhere?
-        Total = nUnitTestResults.Total(),
-        Errors = nUnitTestResults.Errors(),
-        Failures = nUnitTestResults.Failures(),
-        NotRun = nUnitTestResults.NotRun(),
-        Inconclusive = nUnitTestResults.Inconclusive(),
-        Ignored = nUnitTestResults.Ignored(),
-        Skipped = nUnitTestResults.Skipped(),
-        Invalid = nUnitTestResults.Invalid(),
+        Total = 0,//nUnitTestResults.Total(),
+        Errors = 0,//nUnitTestResults.Errors(),
+        Failures = 0,//nUnitTestResults.Failures(),
+        NotRun = 0,//nUnitTestResults.NotRun(),
+        Inconclusive = 0,//nUnitTestResults.Inconclusive(),
+        Ignored = 0,//nUnitTestResults.Ignored(),
+        Skipped = 0,//nUnitTestResults.Skipped(),
+        Invalid = 0,//nUnitTestResults.Invalid(),
         DateTime = nUnitTestResults.DateTimeValue()
       };
       return resultSummary;

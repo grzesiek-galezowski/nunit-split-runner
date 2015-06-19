@@ -51,7 +51,7 @@ namespace NUnitSplitRunner
       Parallel.ForEach(chunks, LoopConfig(), chunk => chunk.PerformNunitRun(_processPath, targetCommandline));
     }
 
-    private static ParallelOptions LoopConfig()
+    private ParallelOptions LoopConfig()
     {
       return new ParallelOptions() { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
     }
