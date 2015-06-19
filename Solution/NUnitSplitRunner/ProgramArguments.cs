@@ -1,29 +1,31 @@
 using System.Collections.Generic;
 using System.Linq;
+using AtmaFileSystem;
 
 namespace NUnitSplitRunner
 {
   public class ProgramArguments
   {
-    private IEnumerable<string> _args;
+    private readonly IEnumerable<string> _args;
 
-    public ProgramArguments(string[] args)
+    public ProgramArguments(IEnumerable<string> args)
     {
       _args = args;
     }
 
-    private static bool IsAssemblyPath(string arg)
+    private static bool IsAssemblyPath(AnyPathWithFileName arg)
     {
-      return arg.EndsWith(".dll");
+      return arg.Has(FileExtension.Value(".dll"));
     }
 
-    public void SplitInto(ICollection<string> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
+    public void SplitInto(List<AnyPathWithFileName> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
     {
       foreach (var arg in _args.Skip(1))
       {
-        if (IsAssemblyPath(arg))
+        var dllPath = AnyPathWithFileName.Value(arg);
+        if (IsAssemblyPath(dllPath))
         {
-          dlls.Add(arg);
+          dlls.Add(dllPath);
         }
         else
         {

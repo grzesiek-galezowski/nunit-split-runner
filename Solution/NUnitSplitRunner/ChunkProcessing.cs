@@ -2,33 +2,34 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using AtmaFileSystem;
 using NUnitReportMerge;
 
 namespace NUnitSplitRunner
 {
   public class ChunkProcessing
   {
-    readonly string _processPath;
+    readonly PathWithFileName _processPath;
     private readonly TestChunkFactory _testChunkFactory;
     private readonly int _maxDegreeOfParallelism;
 
-    public ChunkProcessing(string processPath, TestChunkFactory testChunkFactory, int maxDegreeOfParallelism)
+    public ChunkProcessing(PathWithFileName processPath, TestChunkFactory testChunkFactory, int maxDegreeOfParallelism)
     {
       _processPath = processPath;
       _testChunkFactory = testChunkFactory;
       _maxDegreeOfParallelism = maxDegreeOfParallelism;
     }
 
-    public const string PartialDirName = "partial";
+    public static readonly DirectoryName PartialDirName = DirectoryName.Value("partial");
     public const string InputPattern = "*.xml";
-    public const string OutputPath = "TestResult.xml";
+    public static readonly FileName OutputFileName = FileName.Value("TestResult.xml");
 
-    public void Execute(IEnumerable<string> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
+    public void Execute(IEnumerable<AnyPathWithFileName> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
     {
       RunAllChunks(dlls, remainingTargetCommandline);
     }
 
-    private void RunAllChunks(IEnumerable<string> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
+    private void RunAllChunks(IEnumerable<AnyPathWithFileName> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
     {
       var chunks = new List<ITestChunk>();
       var currentChunk = _testChunkFactory.CreateInitialChunk();
@@ -56,14 +57,14 @@ namespace NUnitSplitRunner
       return new ParallelOptions() { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
     }
 
-    public void MergeReports(string partialDirName, string searchPattern, string finalXmlResultPath)
+    public void MergeReports(DirectoryName partialDirName, string searchPattern, FileName finalXmlResultFileName)
     {
       try
       {
         var list = XmlReportFiles.LoadFrom(partialDirName, searchPattern);
         Console.WriteLine("Loaded " + list.Length + " partial files");
         var result = NUnitReportFactory.CreateFrom(list).MergeAsXml();
-        result.Save(finalXmlResultPath);
+        result.Save(finalXmlResultFileName.ToString());
         Console.WriteLine("Merge successful");
       }
       catch (Exception e)

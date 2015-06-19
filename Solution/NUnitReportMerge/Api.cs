@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Xml.Linq;
+using AtmaFileSystem;
 
 namespace NUnitReportMerge
 {
@@ -8,7 +9,7 @@ namespace NUnitReportMerge
   {
     public static void WriteMergedNunitResults(string directory, string filter, string outfile)
     {
-      var reports = XmlReportFiles.LoadFrom(directory, filter);
+      var reports = XmlReportFiles.LoadFrom(DirectoryName.Value(directory), filter);
       var state = NUnitReportFactory.CreateFrom(reports);
       var mergedReport = state.MergeAsXml();
       File.WriteAllText(outfile, mergedReport.ToString());

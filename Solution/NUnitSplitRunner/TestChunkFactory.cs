@@ -1,12 +1,14 @@
-﻿namespace NUnitSplitRunner
+﻿using AtmaFileSystem;
+
+namespace NUnitSplitRunner
 {
   public class TestChunkFactory
   {
-    readonly string _partialDirName;
+    readonly DirectoryName _partialDirName;
     readonly int _allowedAssemblyCount;
     private OutputBuilder _outputBuilder;
 
-    public TestChunkFactory(int allowedAssemblyCount, string partialDirName, OutputBuilder outputBuilder)
+    public TestChunkFactory(int allowedAssemblyCount, DirectoryName partialDirName, OutputBuilder outputBuilder)
     {
       _allowedAssemblyCount = allowedAssemblyCount;
       _partialDirName = partialDirName;

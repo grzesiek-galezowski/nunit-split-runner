@@ -1,7 +1,9 @@
+using AtmaFileSystem;
+
 namespace NUnitSplitRunner
 {
   public interface ITestChunk
   {
-    void PerformNunitRun(string processName, RealRunnerInvocationOptions realRunnerInvocationOptions);
+    void PerformNunitRun(PathWithFileName thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions);
   }
 }

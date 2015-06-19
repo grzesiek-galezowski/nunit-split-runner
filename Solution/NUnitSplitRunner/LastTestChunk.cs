@@ -1,4 +1,5 @@
 using System;
+using AtmaFileSystem;
 
 namespace NUnitSplitRunner
 {
@@ -11,10 +12,10 @@ namespace NUnitSplitRunner
       _chunk = chunk;
     }
 
-    public void PerformNunitRun(string processName, RealRunnerInvocationOptions realRunnerInvocationOptions)
+    public void PerformNunitRun(PathWithFileName thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions)
     {
       Console.WriteLine("One last run...");
-      _chunk.PerformNunitRun(processName, realRunnerInvocationOptions);
+      _chunk.PerformNunitRun(thirdPartyRunnerPath, realRunnerInvocationOptions);
     }
   }
 }

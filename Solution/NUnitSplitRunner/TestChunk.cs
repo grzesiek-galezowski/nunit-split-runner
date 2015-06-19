@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using AtmaFileSystem;
 
 namespace NUnitSplitRunner
 {
   public class TestChunk : ITestChunk
   {
     public int RunId { get; set; }
-    readonly string _partialDirName;
-    readonly List<string> _dlls = new List<string>();
+    readonly DirectoryName _partialDirName;
+    readonly List<AnyPathWithFileName> _dlls = new List<AnyPathWithFileName>();
     readonly int _allowedAssemblyCount;
     private readonly OutputBuilder _outputBuilder;
 
-    public TestChunk(int runId, string partialDirName, int allowedAssemblyCount, OutputBuilder outputBuilder)
+    public TestChunk(int runId, DirectoryName partialDirName, int allowedAssemblyCount, OutputBuilder outputBuilder)
     {
       RunId = runId;
       _partialDirName = partialDirName;
@@ -21,7 +22,7 @@ namespace NUnitSplitRunner
       _outputBuilder = outputBuilder;
     }
 
-    public void Add(string element)
+    public void Add(AnyPathWithFileName element)
     {
       _dlls.Add(element);
     }
@@ -42,9 +43,9 @@ namespace NUnitSplitRunner
       return _dlls.Count == 0;
     }
 
-    public void PerformNunitRun(string processName, RealRunnerInvocationOptions realRunnerInvocationOptions)
+    public void PerformNunitRun(PathWithFileName thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions)
     {
-      var exitCode = RunCommand(processName, realRunnerInvocationOptions);
+      var exitCode = RunCommand(thirdPartyRunnerPath, realRunnerInvocationOptions);
       Handle(exitCode);
     }
 
@@ -68,7 +69,7 @@ namespace NUnitSplitRunner
       return exitCode != 0;
     }
 
-    public int RunCommand(string processName, RealRunnerInvocationOptions remainingTargetCommandline)
+    public int RunCommand(PathWithFileName processName, RealRunnerInvocationOptions remainingTargetCommandline)
     {
       var arguments = remainingTargetCommandline + " " + this.ToString();
       Console.WriteLine("Running " + processName + " with: " + arguments);
@@ -82,15 +83,15 @@ namespace NUnitSplitRunner
       }
     }
 
-    public Process CreateNUnitProcess(string processName, string arguments)
+    public Process CreateNUnitProcess(PathWithFileName processName, string arguments)
     {
-      Directory.CreateDirectory(_partialDirName);
+      Directory.CreateDirectory(_partialDirName.ToString());
 
       return new Process
         {
           StartInfo =
             {
-              FileName = processName,
+              FileName = processName.ToString(),
               Arguments = arguments + " " + "/xml:" + _partialDirName + "\\nunit-partial-run-" + this.RunId + ".xml",
               UseShellExecute = false,
               Domain = Process.GetCurrentProcess().StartInfo.Domain,
