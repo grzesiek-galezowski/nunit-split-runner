@@ -34,13 +34,13 @@ namespace NUnitSplitRunner
         outputBuilder);
       return new Runner(new ProgramArguments(args), new RealRunnerInvocationOptions(), outputBuilder, 
         new ChunkProcessing(
-          PathWithFileName.Value(thirdPartyRunnerPath), 
+          AbsoluteFilePath.Value(thirdPartyRunnerPath), 
           testChunkFactory, maxDegreeOfParallelism));
     }
 
     public void Run()
     {
-      var dlls = new List<AnyPathWithFileName>();
+      var dlls = new List<AnyFilePath>();
 
       _programArguments.SplitInto(dlls, _realRunnerInvocationOptions);
       _chunkProcessing.Execute(dlls, _realRunnerInvocationOptions);

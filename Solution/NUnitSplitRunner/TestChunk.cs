@@ -10,7 +10,7 @@ namespace NUnitSplitRunner
   {
     public int RunId { get; set; }
     readonly DirectoryName _partialDirName;
-    readonly List<AnyPathWithFileName> _dlls = new List<AnyPathWithFileName>();
+    readonly List<AnyFilePath> _dlls = new List<AnyFilePath>();
     readonly int _allowedAssemblyCount;
     private readonly OutputBuilder _outputBuilder;
 
@@ -22,7 +22,7 @@ namespace NUnitSplitRunner
       _outputBuilder = outputBuilder;
     }
 
-    public void Add(AnyPathWithFileName element)
+    public void Add(AnyFilePath element)
     {
       _dlls.Add(element);
     }
@@ -43,7 +43,7 @@ namespace NUnitSplitRunner
       return _dlls.Count == 0;
     }
 
-    public void PerformNunitRun(PathWithFileName thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions)
+    public void PerformNunitRun(AbsoluteFilePath thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions)
     {
       var exitCode = RunCommand(thirdPartyRunnerPath, realRunnerInvocationOptions);
       Handle(exitCode);
@@ -69,7 +69,7 @@ namespace NUnitSplitRunner
       return exitCode != 0;
     }
 
-    public int RunCommand(PathWithFileName processName, RealRunnerInvocationOptions remainingTargetCommandline)
+    public int RunCommand(AbsoluteFilePath processName, RealRunnerInvocationOptions remainingTargetCommandline)
     {
       var arguments = remainingTargetCommandline + " " + this.ToString();
       Console.WriteLine("Running " + processName + " with: " + arguments);
@@ -83,7 +83,7 @@ namespace NUnitSplitRunner
       }
     }
 
-    public Process CreateNUnitProcess(PathWithFileName processName, string arguments)
+    public Process CreateNUnitProcess(AbsoluteFilePath processName, string arguments)
     {
       Directory.CreateDirectory(_partialDirName.ToString());
 

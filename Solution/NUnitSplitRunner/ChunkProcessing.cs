@@ -9,11 +9,11 @@ namespace NUnitSplitRunner
 {
   public class ChunkProcessing
   {
-    readonly PathWithFileName _processPath;
+    readonly AbsoluteFilePath _processPath;
     private readonly TestChunkFactory _testChunkFactory;
     private readonly int _maxDegreeOfParallelism;
 
-    public ChunkProcessing(PathWithFileName processPath, TestChunkFactory testChunkFactory, int maxDegreeOfParallelism)
+    public ChunkProcessing(AbsoluteFilePath processPath, TestChunkFactory testChunkFactory, int maxDegreeOfParallelism)
     {
       _processPath = processPath;
       _testChunkFactory = testChunkFactory;
@@ -24,12 +24,12 @@ namespace NUnitSplitRunner
     public const string InputPattern = "*.xml";
     public static readonly FileName OutputFileName = FileName.Value("TestResult.xml");
 
-    public void Execute(IEnumerable<AnyPathWithFileName> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
+    public void Execute(IEnumerable<AnyFilePath> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
     {
       RunAllChunks(dlls, remainingTargetCommandline);
     }
 
-    private void RunAllChunks(IEnumerable<AnyPathWithFileName> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
+    private void RunAllChunks(IEnumerable<AnyFilePath> dlls, RealRunnerInvocationOptions remainingTargetCommandline)
     {
       var chunks = new List<ITestChunk>();
       var currentChunk = _testChunkFactory.CreateInitialChunk();

@@ -12,7 +12,7 @@ namespace NUnitSplitRunner
       _chunk = chunk;
     }
 
-    public void PerformNunitRun(PathWithFileName thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions)
+    public void PerformNunitRun(AbsoluteFilePath thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions)
     {
       Console.WriteLine("One last run...");
       _chunk.PerformNunitRun(thirdPartyRunnerPath, realRunnerInvocationOptions);
