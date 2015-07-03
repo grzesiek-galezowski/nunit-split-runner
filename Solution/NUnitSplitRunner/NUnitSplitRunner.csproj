@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AtmaFileSystem, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AtmaFilesystem.0.3.0\lib\net40\AtmaFileSystem.dll</HintPath>
+      <HintPath>..\packages\AtmaFilesystem.0.3.1\lib\net40\AtmaFileSystem.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
