@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using AtmaFileSystem;
+using NUnitSplitRunner.Input;
+using NUnitSplitRunner.Output;
 
-namespace NUnitSplitRunner
+namespace NUnitSplitRunner.Running
 {
   public class TestChunk : ITestChunk
   {

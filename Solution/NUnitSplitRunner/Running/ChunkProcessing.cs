@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using AtmaFileSystem;
 using NUnitReportMerge;
+using NUnitSplitRunner.Input;
 
-namespace NUnitSplitRunner
+namespace NUnitSplitRunner.Running
 {
   public class ChunkProcessing
   {

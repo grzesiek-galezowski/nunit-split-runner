@@ -1,4 +1,4 @@
-﻿namespace NUnitSplitRunner
+﻿namespace NUnitSplitRunner.Input
 {
   public class RealRunnerInvocationOptions
   {

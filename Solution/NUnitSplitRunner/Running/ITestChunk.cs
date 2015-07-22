@@ -1,6 +1,7 @@
 using AtmaFileSystem;
+using NUnitSplitRunner.Input;
 
-namespace NUnitSplitRunner
+namespace NUnitSplitRunner.Running
 {
   public interface ITestChunk
   {

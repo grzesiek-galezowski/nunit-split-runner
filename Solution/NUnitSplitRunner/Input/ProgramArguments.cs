@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AtmaFileSystem;
 
-namespace NUnitSplitRunner
+namespace NUnitSplitRunner.Input
 {
   public class ProgramArguments
   {

@@ -1,7 +1,8 @@
 using System;
 using AtmaFileSystem;
+using NUnitSplitRunner.Input;
 
-namespace NUnitSplitRunner
+namespace NUnitSplitRunner.Running
 {
   public class LastTestChunk : ITestChunk
   {

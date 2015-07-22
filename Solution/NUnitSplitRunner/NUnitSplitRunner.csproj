@@ -51,18 +51,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllStandardOutputThenErrorBuilder.cs" />
-    <Compile Include="ChunkProcessing.cs" />
+    <Compile Include="Output\AllStandardOutputThenErrorBuilder.cs" />
+    <Compile Include="Running\ChunkProcessing.cs" />
     <Compile Include="EntryPoint.cs" />
-    <Compile Include="ITestChunk.cs" />
-    <Compile Include="ProgramArguments.cs" />
-    <Compile Include="RealRunnerInvocationOptions.cs" />
-    <Compile Include="LastTestChunk.cs" />
-    <Compile Include="OutputBuilder.cs" />
+    <Compile Include="Running\ITestChunk.cs" />
+    <Compile Include="Input\ProgramArguments.cs" />
+    <Compile Include="Input\RealRunnerInvocationOptions.cs" />
+    <Compile Include="Running\LastTestChunk.cs" />
+    <Compile Include="Output\OutputBuilder.cs" />
     <Compile Include="Runner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestChunk.cs" />
-    <Compile Include="TestChunkFactory.cs" />
+    <Compile Include="Running\TestChunk.cs" />
+    <Compile Include="Running\TestChunkFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NUnitSplitRunner.exe.config">

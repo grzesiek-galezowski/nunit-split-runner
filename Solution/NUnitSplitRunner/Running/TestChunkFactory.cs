@@ -1,12 +1,13 @@
 ﻿using AtmaFileSystem;
+using NUnitSplitRunner.Output;
 
-namespace NUnitSplitRunner
+namespace NUnitSplitRunner.Running
 {
   public class TestChunkFactory
   {
     readonly DirectoryName _partialDirName;
     readonly int _allowedAssemblyCount;
-    private OutputBuilder _outputBuilder;
+    readonly OutputBuilder _outputBuilder;
 
     public TestChunkFactory(int allowedAssemblyCount, DirectoryName partialDirName, OutputBuilder outputBuilder)
     {

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace NUnitSplitRunner
+namespace NUnitSplitRunner.Output
 {
   public interface OutputBuilder
   {

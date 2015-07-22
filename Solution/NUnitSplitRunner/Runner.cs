@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using AtmaFileSystem;
+using NUnitSplitRunner.Input;
+using NUnitSplitRunner.Output;
+using NUnitSplitRunner.Running;
 
 namespace NUnitSplitRunner
 {
