@@ -8,9 +8,9 @@ namespace NUnitReportMerge
 {
   public class NUnitAssemblies
   {
-    public NUnitAssemblies UnionWith(NUnitAssemblies nUnitAssemblies)
+    public void UnionWith(NUnitAssemblies nUnitAssemblies)
     {
-      return new NUnitAssemblies(_assemblies.Union(nUnitAssemblies._assemblies));
+      _assemblies = _assemblies.Union(nUnitAssemblies._assemblies);
     }
 
     public NUnitAssemblies(IEnumerable<XElement> assemblies)
@@ -25,9 +25,9 @@ namespace NUnitReportMerge
       var time = tuple.Item2;
       var asserts = tuple.Item3;
 
-      var projectEl =
+      var projectXml =
         XElement.Parse(
-          String.Format(CultureInfo.InvariantCulture,
+          string.Format(CultureInfo.InvariantCulture,
                         "<test-suite type=\"Test Project\" name=\"\" executed=\"True\" result=\"{0}\" time=\"{1:F6}\" asserts=\"{2}\" />",
                         result,
                         time,
@@ -35,43 +35,73 @@ namespace NUnitReportMerge
       var results = XElement.Parse("<results/>");
 
       results.Add(_assemblies.ToArray());
-      projectEl.Add(results);
-      return projectEl;
+      projectXml.Add(results);
+      return projectXml;
     }
 
-    private Tuple<string, double, int> Fold()
+    Tuple<string, double, int> Fold()
     {
-      return _assemblies.Aggregate(Tuple.Create("Success", 0.0, 0), FoldAssemblyToProjectTuple);
+      return _assemblies.Aggregate(Tuple.Create("Success", 0.0, 0), (aggregatedValue, assembly) =>
+      {
+        //TODO refactor
+        return new ResultTimeAsserts(aggregatedValue, assembly).Fold();
+      });
     }
 
-
-    private static Tuple<string, double, int> FoldAssemblyToProjectTuple(
-      Tuple<string, double, int> aggregatedValue, XElement assembly)
+    public class ResultTimeAsserts
     {
-      var result = aggregatedValue.Item1;
-      var time = aggregatedValue.Item2;
-      var asserts = aggregatedValue.Item3;
+      private readonly XElement _assembly;
 
-      string outResult;
-
-      if (assembly.Attribute("result").Value == "Failure")
+      public ResultTimeAsserts(Tuple<string, double, int> tuple, XElement assembly)
       {
-        outResult = "Failure";
-      }
-      else if (assembly.Attribute("result").Value == "Inconclusive" && result == "Success")
-      {
-        outResult = "Inconclusive";
-      }
-      else
-      {
-        outResult = result;
+        _assembly = assembly;
+        Result = tuple.Item1;
+        Time = tuple.Item2;
+        Asserts = tuple.Item3;
       }
 
-      return Tuple.Create(outResult, time + XmlCulture.GetDouble(assembly.Attribute("time").Value),
-                          asserts + XmlCulture.GetInt(assembly.Attribute("asserts").Value));
+      public string Result { get; set; }
+      public double Time { get; set; }
+      public int Asserts { get; set; }
+
+      Tuple<string, double, int> AsTuple()
+      {
+        return Tuple.Create(Result, Time, Asserts);
+      }
+
+      public string CreateOutResult()
+      {
+        string outResult;
+        if (_assembly.Attribute("result").Value == "Failure")
+        {
+          outResult = "Failure";
+        }
+        else if (_assembly.Attribute("result").Value == "Inconclusive" && Result == "Success")
+        {
+          outResult = "Inconclusive";
+        }
+        else
+        {
+          outResult = Result;
+        }
+        return outResult;
+      }
+
+      public Tuple<string, double, int> ToTupleWithAssemblyData(string outResult)
+      {
+        return Tuple.Create(outResult, Time + XmlCulture.GetDouble(_assembly.Attribute("time").Value),
+          Asserts + XmlCulture.GetInt(_assembly.Attribute("asserts").Value));
+      }
+
+      public Tuple<string, double, int> Fold()
+      {
+        var outResult = CreateOutResult();
+
+        return ToTupleWithAssemblyData(outResult);
+      }
     }
 
 
-    private readonly IEnumerable<XElement> _assemblies;
+    private IEnumerable<XElement> _assemblies;
   }
 }

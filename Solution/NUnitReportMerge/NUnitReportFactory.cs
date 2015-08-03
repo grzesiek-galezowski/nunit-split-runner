@@ -33,11 +33,12 @@ namespace NUnitReportMerge
       Validations.CheckReportsCoherence(xDoc, nUnitEnvironment, nUnitCulture);
 
       Console.WriteLine("Merging " + xDoc.NUnitSummary().Total + " existing tests with  " + currentSummary.Total);
+      assemblies.UnionWith(xDoc.Assemblies());
       return Tuple.Create(
         xDoc.NUnitSummary().MergeWith(currentSummary),
         nUnitEnvironment,
         nUnitCulture,
-        assemblies.UnionWith(xDoc.Assemblies()));
+        assemblies);
     }
 
     public static NUnitReport CreateFrom(IEnumerable<ReportDocument> list)
