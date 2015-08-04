@@ -20,10 +20,12 @@ namespace NUnitReportMerge
 
     public XElement MergeAsXml()
     {
+      //bug refactor further
       var results = Summary.Xml();
+      var outResultsBuilder = new OutResultsBuilder(results);
       NUnitEnvironment.AddTo(results);
       NUnitCulture.AddTo(results);
-      Assemblies.AddTo(results);
+      Assemblies.AddTo(outResultsBuilder);
       return results;
     }
 

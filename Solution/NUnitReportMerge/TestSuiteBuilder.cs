@@ -7,12 +7,14 @@ namespace NUnitReportMerge
 {
   public class TestSuiteBuilder
   {
+    private readonly IEnumerable<XElement> _assemblyResults;
     string Result { get; set; }
     double Time { get; set; }
     int Asserts { get; set; }
 
-    public TestSuiteBuilder(string result, double time, int asserts)
+    public TestSuiteBuilder(string result, double time, int asserts, IEnumerable<XElement> assemblyResults)
     {
+      _assemblyResults = assemblyResults;
       Result = result;
       Time = time;
       Asserts = asserts;
@@ -43,18 +45,18 @@ namespace NUnitReportMerge
       Asserts += XmlCulture.GetInt(xElement.Attribute("asserts").Value);
     }
 
-    public XElement Build(IEnumerable<XElement> assemblies)
+    public XElement Build()
     {
-      var results = CreateResultsTag(assemblies);
+      var results = AddResultsTag();
       var projectXml = CreateTestSuiteTag();
       projectXml.Add(results);
       return projectXml;
     }
 
-    static XElement CreateResultsTag(IEnumerable<XElement> assemblies)
+    XElement AddResultsTag()
     {
       var results = XElement.Parse("<results/>");
-      results.Add(assemblies.ToArray());
+      results.Add(_assemblyResults.ToArray());
       return results;
     }
 

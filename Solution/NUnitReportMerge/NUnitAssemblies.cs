@@ -19,17 +19,16 @@ namespace NUnitReportMerge
       _assemblyResults = _assemblyResults.Union(nUnitAssemblies._assemblyResults);
     }
 
-    public void AddTo(XElement results)
+    public void AddTo(OutResultsBuilder results)
     {
-      var testSuiteBuilder = new TestSuiteBuilder("Success", 0.0, 0);
+      var testSuiteBuilder = new TestSuiteBuilder("Success", 0.0, 0, _assemblyResults);
 
       foreach (var assemblyResults in _assemblyResults)
       {
         testSuiteBuilder.Add(assemblyResults);
       }
 
-      var projectXml = testSuiteBuilder.Build(_assemblyResults);
-      results.Add(projectXml);
+      results.Add(testSuiteBuilder);
     }
   }
 }
