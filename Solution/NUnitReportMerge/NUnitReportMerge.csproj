@@ -49,12 +49,14 @@
   <ItemGroup>
     <Compile Include="Api.cs" />
     <Compile Include="NUnitAssemblies.cs" />
+    <Compile Include="NUnitAssembly.cs" />
     <Compile Include="NUnitReport.cs" />
     <Compile Include="NUnitCulture.cs" />
     <Compile Include="NUnitEnvironment.cs" />
     <Compile Include="NUnitReportFactory.cs" />
     <Compile Include="ReportDocument.cs" />
     <Compile Include="ResultSummary.cs" />
+    <Compile Include="TestSuiteBuilder.cs" />
     <Compile Include="XmlReportFiles.cs" />
     <Compile Include="NUnitResultSummary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

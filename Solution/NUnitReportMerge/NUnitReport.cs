@@ -5,10 +5,10 @@ namespace NUnitReportMerge
 {
   public class NUnitReport
   {
-    private readonly NUnitResultSummary _summary;
-    private readonly NUnitEnvironment _nUnitEnvironment;
-    private readonly NUnitCulture _nUnitCulture;
-    private readonly NUnitAssemblies _assemblies;
+    readonly NUnitResultSummary _summary;
+    readonly NUnitEnvironment _nUnitEnvironment;
+    readonly NUnitCulture _nUnitCulture;
+    readonly NUnitAssemblies _assemblies;
 
     public NUnitReport(NUnitResultSummary summary, NUnitEnvironment nUnitEnvironment, NUnitCulture nUnitCulture, NUnitAssemblies assemblies)
     {
@@ -18,31 +18,35 @@ namespace NUnitReportMerge
       _assemblies = assemblies;
     }
 
-    private NUnitResultSummary Summary
+    public XElement MergeAsXml()
+    {
+      var results = Summary.Xml();
+      NUnitEnvironment.AddTo(results);
+      NUnitCulture.AddTo(results);
+      Assemblies.AddTo(results);
+      return results;
+    }
+
+
+    NUnitResultSummary Summary
     {
       get { return _summary; }
     }
 
-    private NUnitEnvironment NUnitEnvironment
+    NUnitEnvironment NUnitEnvironment
     {
       get { return _nUnitEnvironment; }
     }
 
-    private NUnitCulture NUnitCulture
+    NUnitCulture NUnitCulture
     {
       get { return _nUnitCulture; }
     }
 
-    private NUnitAssemblies Assemblies
+    NUnitAssemblies Assemblies
     {
       get { return _assemblies; }
     }
 
-    public XElement MergeAsXml()
-    {
-      var results = Summary.Xml();
-      results.Add(NUnitEnvironment.Xml(), NUnitCulture.Xml(), Assemblies.Xml());
-      return results;
-    }
   }
 }

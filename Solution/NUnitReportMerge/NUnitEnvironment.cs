@@ -4,18 +4,18 @@ namespace NUnitReportMerge
 {
   public class NUnitEnvironment
   {
-    public string NUnitVersion { get; set; }
-    public string ClrVersion { get; set; }
-    public string OsVersion { get; set; }
-    public string Platform { get; set; }
-    public string Cwd { get; set; }
-    public string MachineName { get; set; }
-    public string User { get; set; }
-    public string UserDomain { get; set; }
+    public string NUnitVersion { private get; set; }
+    public string ClrVersion { private get; set; }
+    public string OsVersion { private get; set; }
+    public string Platform { private get; set; }
+    public string Cwd { private get; set; }
+    public string MachineName { private get; set; }
+    public string User { private get; set; }
+    public string UserDomain { private get; set; }
 
-    public XElement Xml()
+    public void AddTo(XElement results)
     {
-      return XElement.Parse(XmlCulture.Format(
+      results.Add(XElement.Parse(XmlCulture.Format(
         "<environment nunit-version=\"{0}\" clr-version=\"{1}\" os-version=\"{2}\" platform=\"{3}\" cwd=\"{4}\" machine-name=\"{5}\" user=\"{6}\" user-domain=\"{7}\" />",
         NUnitVersion,
         ClrVersion,
@@ -24,7 +24,7 @@ namespace NUnitReportMerge
         Cwd,
         MachineName,
         User,
-        UserDomain));
+        UserDomain)));
     }
   }
 }

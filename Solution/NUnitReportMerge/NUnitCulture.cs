@@ -8,12 +8,12 @@ namespace NUnitReportMerge
     public string CurrentCulture { private get; set; }
     public string CurrentUiCulture { private get; set; }
 
-    public XElement Xml()
+    public void AddTo(XElement results)
     {
-      return XElement.Parse(XmlCulture.Format(
+      results.Add(XElement.Parse(XmlCulture.Format(
         "<culture-info current-culture=\"{0}\" current-uiculture=\"{1}\" />",
         CurrentCulture,
-        CurrentUiCulture));
+        CurrentUiCulture)));
     }
   }
 }
