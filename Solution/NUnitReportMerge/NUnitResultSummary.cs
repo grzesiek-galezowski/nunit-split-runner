@@ -7,15 +7,16 @@ namespace NUnitReportMerge
   public class NUnitResultSummary
   {
     public int Total { get; set; }
-    public int Errors { get; set; }
-    public int Failures { get; set; }
-    public int NotRun { get; set; }
-    public int Inconclusive { get; set; }
-    public int Ignored { get; set; }
-    public int Skipped { get; set; }
-    public int Invalid { get; set; }
-    public DateTime DateTime { get; set; }
+    public int Errors { private get; set; }
+    public int Failures { private get; set; }
+    public int NotRun { private get; set; }
+    public int Inconclusive { private get; set; }
+    public int Ignored { private get; set; }
+    public int Skipped { private get; set; }
+    public int Invalid { private get; set; }
+    public DateTime DateTime { private get; set; }
 
+    //bug refactor
     public NUnitResultSummary MergeWith(NUnitResultSummary summary)
     {
       Total += summary.Total;
@@ -31,19 +32,9 @@ namespace NUnitReportMerge
       return this;
     }
 
-    public XElement Xml()
+    public OutResultsBuilder Builder()
     {
-      return XElement.Parse(XmlCulture.Format(
-        "<test-results name=\"Merged results\" total=\"{0}\" errors=\"{1}\" failures=\"{2}\" not-run=\"{3}\" inconclusive=\"{4}\" skipped=\"{5}\" invalid=\"{6}\" date=\"{7}\" time=\"{8}\" />",
-        Total,
-        Errors,
-        Failures,
-        NotRun,
-        Inconclusive,
-        Skipped,
-        Invalid,
-        (DateTime.ToString("yyyy-MM-dd")),
-        (DateTime.ToString("HH:mm:ss"))));
+      return OutResultsBuilder.New(Total, Errors, Failures, NotRun, Inconclusive, Skipped, Invalid, DateTime);
     }
   }
 }

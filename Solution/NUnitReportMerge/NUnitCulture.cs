@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml.Linq;
 
 namespace NUnitReportMerge
 {
@@ -8,12 +7,9 @@ namespace NUnitReportMerge
     public string CurrentCulture { private get; set; }
     public string CurrentUiCulture { private get; set; }
 
-    public void AddTo(XElement results)
+    public void AddTo(OutResultsBuilder outResultsBuilder)
     {
-      results.Add(XElement.Parse(XmlCulture.Format(
-        "<culture-info current-culture=\"{0}\" current-uiculture=\"{1}\" />",
-        CurrentCulture,
-        CurrentUiCulture)));
+      outResultsBuilder.AddCultureInfo(CurrentCulture, CurrentUiCulture);
     }
   }
 }

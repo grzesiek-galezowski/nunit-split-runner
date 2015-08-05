@@ -21,12 +21,11 @@ namespace NUnitReportMerge
     public XElement MergeAsXml()
     {
       //bug refactor further
-      var results = Summary.Xml();
-      var outResultsBuilder = new OutResultsBuilder(results);
-      NUnitEnvironment.AddTo(results);
-      NUnitCulture.AddTo(results);
+      var outResultsBuilder = Summary.Builder();
+      NUnitEnvironment.AddTo(outResultsBuilder);
+      NUnitCulture.AddTo(outResultsBuilder);
       Assemblies.AddTo(outResultsBuilder);
-      return results;
+      return outResultsBuilder.Build();
     }
 
 

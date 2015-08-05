@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace NUnitReportMerge
+﻿namespace NUnitReportMerge
 {
   public class NUnitEnvironment
   {
@@ -13,18 +11,16 @@ namespace NUnitReportMerge
     public string User { private get; set; }
     public string UserDomain { private get; set; }
 
-    public void AddTo(XElement results)
+    public void AddTo(OutResultsBuilder outResultsBuilder)
     {
-      results.Add(XElement.Parse(XmlCulture.Format(
-        "<environment nunit-version=\"{0}\" clr-version=\"{1}\" os-version=\"{2}\" platform=\"{3}\" cwd=\"{4}\" machine-name=\"{5}\" user=\"{6}\" user-domain=\"{7}\" />",
-        NUnitVersion,
-        ClrVersion,
-        OsVersion,
-        Platform,
-        Cwd,
-        MachineName,
-        User,
-        UserDomain)));
+      outResultsBuilder.AddEnvironmentInformation(
+        NUnitVersion, 
+        ClrVersion, 
+        OsVersion, 
+        Platform, 
+        Cwd, 
+        MachineName, 
+        User, UserDomain);
     }
   }
 }

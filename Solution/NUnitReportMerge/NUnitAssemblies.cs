@@ -28,7 +28,7 @@ namespace NUnitReportMerge
         testSuiteBuilder.Add(assemblyResults);
       }
 
-      results.Add(testSuiteBuilder);
+      results.AddTestSuite(testSuiteBuilder);
     }
   }
 }

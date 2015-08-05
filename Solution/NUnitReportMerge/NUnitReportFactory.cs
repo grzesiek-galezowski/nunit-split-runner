@@ -5,6 +5,7 @@ using System.Xml.Linq;
 
 namespace NUnitReportMerge
 {
+  //bug refactor all of it
   public class NUnitReportFactory
   {
     private static Tuple<NUnitResultSummary, NUnitEnvironment, NUnitCulture, NUnitAssemblies> Fold(IEnumerable<ReportDocument> docs)
