@@ -1,7 +1,7 @@
 using System;
 using System.Xml.Linq;
 
-namespace NUnitReportMerge
+namespace NUnitReportMerge.Out
 {
   public class OutResultsBuilder
   {

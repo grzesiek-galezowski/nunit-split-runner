@@ -1,4 +1,6 @@
-﻿namespace NUnitReportMerge
+﻿using NUnitReportMerge.Out;
+
+namespace NUnitReportMerge.Model
 {
   public class NUnitEnvironment
   {

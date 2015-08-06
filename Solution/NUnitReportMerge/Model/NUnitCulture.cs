@@ -1,6 +1,6 @@
-﻿using System;
+﻿using NUnitReportMerge.Out;
 
-namespace NUnitReportMerge
+namespace NUnitReportMerge.Model
 {
   public class NUnitCulture
   {

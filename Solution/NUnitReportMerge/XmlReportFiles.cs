@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using AtmaFileSystem;
+using NUnitReportMerge.Input;
+using NUnitReportMerge.Model;
 
 namespace NUnitReportMerge
 {
@@ -11,8 +13,20 @@ namespace NUnitReportMerge
   {
     public static SingleRunReport[] LoadFrom(DirectoryName directory, string filter)
     {
-      var files = Directory.GetFiles(directory.ToString(), filter, SearchOption.AllDirectories);
-      Console.WriteLine("Found reports: " + String.Join(", ", files));
+      var files = GetFiles(directory, filter);
+
+      Console.WriteLine("Found reports: " + string.Join(", ", files));
+
+      return Parse(files);
+    }
+
+    private static string[] GetFiles(DirectoryName directory, string filter)
+    {
+      return Directory.GetFiles(directory.ToString(), filter, SearchOption.AllDirectories);
+    }
+
+    private static SingleRunReport[] Parse(string[] files)
+    {
       return files.Select(fileName => XDocument.Parse(File.ReadAllText(fileName)))
         .Select(NewSingleRunReport).ToArray();
     }
@@ -55,7 +69,7 @@ namespace NUnitReportMerge
       new NUnitAssemblies(AssemblyElements(d)));
     }
 
-    private static IEnumerable<XElement> AssemblyElements(XDocument d)
+    private static IEnumerable<XElement> AssemblyElements(XContainer d)
     {
       return d.Descendants().Where(el => el.Name == "test-suite" && el.Attribute("type").Value == "Assembly");
     }
@@ -70,17 +84,17 @@ namespace NUnitReportMerge
       return cultureElement.Attribute("current-uiculture").Value;
     }
 
-    private static XElement EnvironmentElement(XDocument d)
+    private static XElement EnvironmentElement(XContainer d)
     {
       return d.Element("test-results").Element("environment");
     }
 
-    private static XElement CultureElement(XDocument d)
+    private static XElement CultureElement(XContainer d)
     {
       return d.Element("test-results").Element("culture-info");
     }
 
-    private static XElement TestResultsElement(XDocument d)
+    private static XElement TestResultsElement(XContainer d)
     {
       return d.Element("test-results");
     }

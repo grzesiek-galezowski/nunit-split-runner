@@ -1,9 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using NUnitReportMerge.Out;
 
-namespace NUnitReportMerge
+namespace NUnitReportMerge.Model
 {
   public class NUnitAssemblies
   {

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace NUnitReportMerge
+namespace NUnitReportMerge.Input
 {
   public class TestResultsEnvironment
   {

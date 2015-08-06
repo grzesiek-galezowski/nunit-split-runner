@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using NUnitReportMerge.Model;
+using NUnitReportMerge.Out;
 
 namespace NUnitReportMerge
 {
