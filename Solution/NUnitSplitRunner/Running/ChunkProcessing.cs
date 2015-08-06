@@ -63,7 +63,7 @@ namespace NUnitSplitRunner.Running
       {
         var list = XmlReportFiles.LoadFrom(partialDirName, searchPattern);
         Console.WriteLine("Loaded " + list.Length + " partial files");
-        var result = NUnitReportFactory.CreateFrom(list).MergeAsXml();
+        var result = NUnitReportFactory.CreateFrom(list).Xml();
         result.Save(finalXmlResultFileName.ToString());
         Console.WriteLine("Merge successful");
       }

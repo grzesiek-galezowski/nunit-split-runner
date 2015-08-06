@@ -15,7 +15,7 @@ namespace NUnitReportMerge
 
     public DateTime DateTimeValue()
     {
-      return DateTime.Parse(String.Concat(_element.Attribute("date").Value, " ", _element.Attribute("time").Value), CultureInfo.InvariantCulture);
+      return DateTime.Parse(string.Concat(_element.Attribute("date").Value, " ", _element.Attribute("time").Value), CultureInfo.InvariantCulture);
     }
 
     public int Invalid()

@@ -16,8 +16,7 @@ namespace NUnitReportMerge
     public int Invalid { private get; set; }
     public DateTime DateTime { private get; set; }
 
-    //bug refactor
-    public NUnitResultSummary MergeWith(NUnitResultSummary summary)
+    public void Add(NUnitResultSummary summary)
     {
       Total += summary.Total;
       Errors += summary.Errors;
@@ -28,8 +27,6 @@ namespace NUnitReportMerge
       Skipped += summary.Skipped;
       Invalid += summary.Invalid;
       DateTime = (new[] {DateTime, summary.DateTime}).Min();
-
-      return this;
     }
 
     public OutResultsBuilder Builder()

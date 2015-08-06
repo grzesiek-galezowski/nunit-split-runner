@@ -48,21 +48,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api.cs" />
-    <Compile Include="NUnitAssemblies.cs" />
-    <Compile Include="NUnitAssembly.cs" />
+    <Compile Include="Model\NUnitAssemblies.cs" />
     <Compile Include="NUnitReport.cs" />
-    <Compile Include="NUnitCulture.cs" />
-    <Compile Include="NUnitEnvironment.cs" />
+    <Compile Include="Model\NUnitCulture.cs" />
+    <Compile Include="Model\NUnitEnvironment.cs" />
     <Compile Include="NUnitReportFactory.cs" />
-    <Compile Include="OutResultsBuilder.cs" />
-    <Compile Include="ReportDocument.cs" />
-    <Compile Include="ResultSummary.cs" />
+    <Compile Include="Out\OutResultsBuilder.cs" />
+    <Compile Include="SingleRunReport.cs" />
+    <Compile Include="Input\ResultSummary.cs" />
     <Compile Include="TestSuiteBuilder.cs" />
     <Compile Include="XmlReportFiles.cs" />
-    <Compile Include="NUnitResultSummary.cs" />
+    <Compile Include="Model\NUnitResultSummary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestResultsEnvironment.cs" />
-    <Compile Include="Validations.cs" />
+    <Compile Include="Input\TestResultsEnvironment.cs" />
     <Compile Include="XmlCulture.cs" />
   </ItemGroup>
   <ItemGroup>

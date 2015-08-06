@@ -6,48 +6,33 @@ namespace NUnitReportMerge
   public class NUnitReport
   {
     readonly NUnitResultSummary _summary;
-    readonly NUnitEnvironment _nUnitEnvironment;
-    readonly NUnitCulture _nUnitCulture;
+    readonly SingleRunReport _firstRunReport;
     readonly NUnitAssemblies _assemblies;
 
-    public NUnitReport(NUnitResultSummary summary, NUnitEnvironment nUnitEnvironment, NUnitCulture nUnitCulture, NUnitAssemblies assemblies)
+    public NUnitReport(SingleRunReport firstRunReport, NUnitAssemblies assemblies)
     {
-      _summary = summary;
-      _nUnitEnvironment = nUnitEnvironment;
-      _nUnitCulture = nUnitCulture;
+      _summary = firstRunReport.NUnitSummary();
+      _firstRunReport = firstRunReport;
       _assemblies = assemblies;
     }
 
-    public XElement MergeAsXml()
+    public XElement Xml()
     {
-      //bug refactor further
-      var outResultsBuilder = Summary.Builder();
-      NUnitEnvironment.AddTo(outResultsBuilder);
-      NUnitCulture.AddTo(outResultsBuilder);
-      Assemblies.AddTo(outResultsBuilder);
+      var outResultsBuilder = _summary.Builder();
+      _firstRunReport.AddCultureAndEnvironmentTo(outResultsBuilder);
+      _assemblies.AddTo(outResultsBuilder);
       return outResultsBuilder.Build();
     }
 
-
-    NUnitResultSummary Summary
+    public void Add(SingleRunReport nextRunReport)
     {
-      get { return _summary; }
+      nextRunReport.AddAssembliesTo(_assemblies);
+      _summary.Add(nextRunReport.NUnitSummary());
     }
 
-    NUnitEnvironment NUnitEnvironment
+    public void AnnounceMergeWith(SingleRunReport nextRunReport)
     {
-      get { return _nUnitEnvironment; }
+      nextRunReport.AnnounceMergeWith(_summary);
     }
-
-    NUnitCulture NUnitCulture
-    {
-      get { return _nUnitCulture; }
-    }
-
-    NUnitAssemblies Assemblies
-    {
-      get { return _assemblies; }
-    }
-
   }
 }

@@ -11,7 +11,7 @@ namespace NUnitReportMerge
     {
       var reports = XmlReportFiles.LoadFrom(DirectoryName.Value(directory), filter);
       var state = NUnitReportFactory.CreateFrom(reports);
-      var mergedReport = state.MergeAsXml();
+      var mergedReport = state.Xml();
       File.WriteAllText(outfile, mergedReport.ToString());
     }
   }

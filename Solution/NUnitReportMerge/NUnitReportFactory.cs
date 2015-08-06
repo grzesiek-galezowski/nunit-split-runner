@@ -8,45 +8,21 @@ namespace NUnitReportMerge
   //bug refactor all of it
   public class NUnitReportFactory
   {
-    public static NUnitReport CreateFrom(IEnumerable<ReportDocument> list)
+    public static NUnitReport CreateFrom(IEnumerable<SingleRunReport> list)
     {
-      var report = list.First();
+      var firstRunReport = list.First();
 
-      return ToNUnitRunReport(list, report);
-    }
+      var fullReport = new NUnitReport(
+        firstRunReport, new NUnitAssemblies(Enumerable.Empty<XElement>()));
 
-    private static NUnitReport ToNUnitRunReport(IEnumerable<ReportDocument> list, ReportDocument report)
-    {
-      var resultSummary = report.NUnitSummary();
-      var environment = report.Environment();
-      var culture = report.Culture();
-      var noElementsAtFirst = new NUnitAssemblies(Enumerable.Empty<XElement>());
-
-      foreach (var item in list)
+      foreach (var nextRunReport in list)
       {
-        var currentSummary = resultSummary;
-        var nUnitEnvironment = environment;
-        var nUnitCulture = culture;
-        var assemblies = noElementsAtFirst;
-
-        Validations.CheckReportsCoherence(item, nUnitEnvironment, nUnitCulture);
-
-        Console.WriteLine(
-          "Merging " + item.NUnitSummary().Total + 
-          " existing tests with  " + currentSummary.Total);
-
-        item.AddTo(assemblies);
-
-        resultSummary = item.MergeWith(currentSummary);
-        environment = nUnitEnvironment;
-        culture = nUnitCulture;
-        noElementsAtFirst = assemblies;
-
-
+        nextRunReport.AssertIsFromTheSameRunAs(firstRunReport);
+        fullReport.AnnounceMergeWith(nextRunReport);
+        fullReport.Add(nextRunReport);
       }
 
-      var nUnitRunInfo = new NUnitReport(resultSummary, environment, culture, noElementsAtFirst);
-      return nUnitRunInfo;
+      return fullReport;
     }
   }
 }
