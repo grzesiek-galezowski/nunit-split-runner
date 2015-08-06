@@ -7,7 +7,7 @@ namespace NUnitReportMerge
 {
   public class TestSuiteBuilder
   {
-    private readonly IEnumerable<XElement> _assemblyResults;
+    readonly IEnumerable<XElement> _assemblyResults;
     string Result { get; set; }
     double Time { get; set; }
     int Asserts { get; set; }

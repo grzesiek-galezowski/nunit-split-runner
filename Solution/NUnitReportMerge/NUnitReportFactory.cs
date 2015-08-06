@@ -8,44 +8,44 @@ namespace NUnitReportMerge
   //bug refactor all of it
   public class NUnitReportFactory
   {
-    private static Tuple<NUnitResultSummary, NUnitEnvironment, NUnitCulture, NUnitAssemblies> Fold(IEnumerable<ReportDocument> docs)
+    public static NUnitReport CreateFrom(IEnumerable<ReportDocument> list)
     {
-      var report = docs.First();
+      var report = list.First();
 
+      return ToNUnitRunReport(list, report);
+    }
+
+    private static NUnitReport ToNUnitRunReport(IEnumerable<ReportDocument> list, ReportDocument report)
+    {
       var resultSummary = report.NUnitSummary();
       var environment = report.Environment();
       var culture = report.Culture();
       var noElementsAtFirst = new NUnitAssemblies(Enumerable.Empty<XElement>());
 
-      var state = Tuple.Create(resultSummary, environment, culture, noElementsAtFirst);
+      foreach (var item in list)
+      {
+        var currentSummary = resultSummary;
+        var nUnitEnvironment = environment;
+        var nUnitCulture = culture;
+        var assemblies = noElementsAtFirst;
 
-      return docs
-        .Aggregate(state, Folder);
-    }
+        Validations.CheckReportsCoherence(item, nUnitEnvironment, nUnitCulture);
 
-    private static Tuple<NUnitResultSummary, NUnitEnvironment, NUnitCulture, NUnitAssemblies> Folder(
-      Tuple<NUnitResultSummary, NUnitEnvironment, NUnitCulture, NUnitAssemblies> state, ReportDocument xDoc)
-    {
-      var currentSummary = state.Item1;
-      var nUnitEnvironment = state.Item2;
-      var nUnitCulture = state.Item3;
-      var assemblies = state.Item4;
+        Console.WriteLine(
+          "Merging " + item.NUnitSummary().Total + 
+          " existing tests with  " + currentSummary.Total);
 
-      Validations.CheckReportsCoherence(xDoc, nUnitEnvironment, nUnitCulture);
+        item.AddTo(assemblies);
 
-      Console.WriteLine("Merging " + xDoc.NUnitSummary().Total + " existing tests with  " + currentSummary.Total);
-      assemblies.JoinWith(xDoc.Assemblies());
-      return Tuple.Create(
-        xDoc.NUnitSummary().MergeWith(currentSummary),
-        nUnitEnvironment,
-        nUnitCulture,
-        assemblies);
-    }
+        resultSummary = item.MergeWith(currentSummary);
+        environment = nUnitEnvironment;
+        culture = nUnitCulture;
+        noElementsAtFirst = assemblies;
 
-    public static NUnitReport CreateFrom(IEnumerable<ReportDocument> list)
-    {
-      var tuple = Fold(list);
-      var nUnitRunInfo = new NUnitReport(tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4);
+
+      }
+
+      var nUnitRunInfo = new NUnitReport(resultSummary, environment, culture, noElementsAtFirst);
       return nUnitRunInfo;
     }
   }

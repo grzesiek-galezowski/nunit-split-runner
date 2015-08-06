@@ -63,7 +63,7 @@ namespace NUnitReportMerge
       return resultSummary;
     }
 
-    public NUnitAssemblies Assemblies()
+    private NUnitAssemblies Assemblies()
     {
       return new NUnitAssemblies(_doc.Descendants().Where(el => el.Name == "test-suite" && el.Attribute("type").Value == "Assembly"));
     }
@@ -79,6 +79,16 @@ namespace NUnitReportMerge
     private TestResultsEnvironment TestResultsEnvironment()
     {
       return new TestResultsEnvironment(_doc.Element("test-results").Element("environment"));
+    }
+
+    public NUnitResultSummary MergeWith(NUnitResultSummary currentSummary)
+    {
+      return NUnitSummary().MergeWith(currentSummary);
+    }
+
+    public void AddTo(NUnitAssemblies assemblies)
+    {
+      assemblies.JoinWith(Assemblies());
     }
   }
 }
