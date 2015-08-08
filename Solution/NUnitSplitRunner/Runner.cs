@@ -51,7 +51,10 @@ namespace NUnitSplitRunner
       Console.WriteLine(_outputBuilder.Output());
       Console.Error.WriteLine(_outputBuilder.Errors());
 
-      _chunkProcessing.MergeReports(ChunkProcessing.PartialDirName, ChunkProcessing.InputPattern, ChunkProcessing.OutputFileName);
+      _chunkProcessing.MergeReports(
+        ChunkProcessing.PartialDirName, 
+        ChunkProcessing.InputPattern, 
+        ChunkProcessing.OutputFileName);
     }
   }
 }

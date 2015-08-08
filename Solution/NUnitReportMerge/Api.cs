@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Xml.Linq;
 using AtmaFileSystem;
+using NUnitReportMerge.Out;
 
 namespace NUnitReportMerge
 {
@@ -11,8 +12,9 @@ namespace NUnitReportMerge
     {
       var reports = XmlReportFiles.LoadFrom(DirectoryName.Value(directory), filter);
       var state = NUnitReportFactory.CreateFrom(reports);
-      var mergedReport = state.Xml();
-      File.WriteAllText(outfile, mergedReport.ToString());
+      var builder = new OutResultsBuilder();
+      state.Xml(builder);
+      File.WriteAllText(outfile, builder.Build().ToString());
     }
   }
 }

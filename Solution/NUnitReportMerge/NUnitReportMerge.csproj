@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Api.cs" />
     <Compile Include="Model\NUnitAssemblies.cs" />
+    <Compile Include="Model\NUnitAssembly.cs" />
     <Compile Include="NUnitReport.cs" />
     <Compile Include="Model\NUnitCulture.cs" />
     <Compile Include="Model\NUnitEnvironment.cs" />
@@ -56,7 +57,8 @@
     <Compile Include="Out\OutResultsBuilder.cs" />
     <Compile Include="SingleRunReport.cs" />
     <Compile Include="Input\ResultSummary.cs" />
-    <Compile Include="TestSuiteBuilder.cs" />
+    <Compile Include="Out\TestSuiteBuilder.cs" />
+    <Compile Include="TestResultsForAssembly.cs" />
     <Compile Include="XmlReportFiles.cs" />
     <Compile Include="Model\NUnitResultSummary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

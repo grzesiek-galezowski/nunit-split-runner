@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NUnitReportMerge.Input;
 using NUnitReportMerge.Out;
 
 namespace NUnitReportMerge.Model
@@ -7,14 +8,14 @@ namespace NUnitReportMerge.Model
   public class NUnitResultSummary
   {
     public int Total { get; set; }
-    public int Errors { private get; set; }
-    public int Failures { private get; set; }
-    public int NotRun { private get; set; }
-    public int Inconclusive { private get; set; }
-    public int Ignored { private get; set; }
-    public int Skipped { private get; set; }
-    public int Invalid { private get; set; }
-    public DateTime DateTime { private get; set; }
+    int Errors { get; set; }
+    int Failures { get; set; }
+    int NotRun { get; set; }
+    int Inconclusive { get; set; }
+    int Ignored { get; set; }
+    int Skipped { get; set; }
+    int Invalid { get; set; }
+    DateTime DateTime { get; set; }
 
     public void Add(NUnitResultSummary summary)
     {
@@ -29,9 +30,25 @@ namespace NUnitReportMerge.Model
       DateTime = (new[] {DateTime, summary.DateTime}).Min();
     }
 
-    public OutResultsBuilder Builder()
+    public static NUnitResultSummary From(ResultSummary nUnitTestResults)
     {
-      return OutResultsBuilder.New(Total, Errors, Failures, NotRun, Inconclusive, Skipped, Invalid, DateTime);
+      return new NUnitResultSummary
+      {
+        Total = nUnitTestResults.Total(),
+        Errors = nUnitTestResults.Errors(),
+        Failures = nUnitTestResults.Failures(),
+        NotRun = nUnitTestResults.NotRun(),
+        Inconclusive = nUnitTestResults.Inconclusive(),
+        Ignored = nUnitTestResults.Ignored(),
+        Skipped = nUnitTestResults.Skipped(),
+        Invalid = nUnitTestResults.Invalid(),
+        DateTime = nUnitTestResults.DateTimeValue()
+      };
+    }
+
+    public void AddTo(OutResultsBuilder outResultsBuilder)
+    {
+      outResultsBuilder.AddSummary(Total, Errors, Failures, NotRun, Inconclusive, Skipped, Invalid, DateTime);
     }
   }
 }

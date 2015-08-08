@@ -6,7 +6,7 @@ namespace NUnitReportMerge.Input
 {
   public class ResultSummary
   {
-    private readonly XElement _element;
+    readonly XElement _element;
 
     public ResultSummary(XElement initelement)
     {

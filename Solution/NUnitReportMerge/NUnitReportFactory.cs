@@ -11,14 +11,11 @@ namespace NUnitReportMerge
   {
     public static NUnitReport CreateFrom(IEnumerable<SingleRunReport> list)
     {
-      var firstRunReport = list.First();
-
-      var fullReport = new NUnitReport(
-        firstRunReport, new NUnitAssemblies(Enumerable.Empty<XElement>()));
+      var fullReport = NUnitReport.FullReport(list.First());
 
       foreach (var nextRunReport in list)
       {
-        nextRunReport.AssertIsFromTheSameRunAs(firstRunReport);
+        fullReport.AssertIsFromTheSameRunAs(nextRunReport);
         fullReport.AnnounceMergeWith(nextRunReport);
         fullReport.Add(nextRunReport);
       }

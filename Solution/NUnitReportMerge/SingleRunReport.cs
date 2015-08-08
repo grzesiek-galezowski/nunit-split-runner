@@ -51,7 +51,7 @@ namespace NUnitReportMerge
       nUnitAssemblies.JoinWith(_nUnitAssemblies);
     }
 
-    public void AddCultureAndEnvironmentTo(OutResultsBuilder outResultsBuilder)
+    public void AddCultureAndEnvironmentInfoTo(OutResultsBuilder outResultsBuilder)
     {
       _nUnitEnvironment.AddTo(outResultsBuilder);
       _nUnitCulture.AddTo(outResultsBuilder);

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using AtmaFileSystem;
 using NUnitReportMerge;
+using NUnitReportMerge.Out;
 using NUnitSplitRunner.Input;
 
 namespace NUnitSplitRunner.Running
@@ -62,9 +64,11 @@ namespace NUnitSplitRunner.Running
       try
       {
         var list = XmlReportFiles.LoadFrom(partialDirName, searchPattern);
+        var resultBuilder = new OutResultsBuilder();
         Console.WriteLine("Loaded " + list.Length + " partial files");
-        var result = NUnitReportFactory.CreateFrom(list).Xml();
-        result.Save(finalXmlResultFileName.ToString());
+        NUnitReportFactory.CreateFrom(list).Xml(resultBuilder);
+        var finalXmlOutput = resultBuilder.Build();
+        finalXmlOutput.Save(finalXmlResultFileName.ToString());
         Console.WriteLine("Merge successful");
       }
       catch (Exception e)

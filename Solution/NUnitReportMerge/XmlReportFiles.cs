@@ -39,6 +39,7 @@ namespace NUnitReportMerge
 
       XElement testResultsElement = TestResultsElement(d);
       ResultSummary nUnitTestResults = new ResultSummary(testResultsElement);
+      IEnumerable<XElement> assemblyResults = AssemblyElements(d);
       return new SingleRunReport(new NUnitEnvironment
       {
         NUnitVersion = testResultsEnvironment.NUnitVersion(),
@@ -50,23 +51,25 @@ namespace NUnitReportMerge
         User = testResultsEnvironment.User(),
         UserDomain = testResultsEnvironment.UserDomain()
       },
-      new NUnitCulture
+      From(cultureElement), NUnitResultSummary.From(nUnitTestResults),
+      new NUnitAssemblies(assemblyResults.Select(r =>
+      {
+        var testResultsForAssembly = new TestResultsForAssembly(r);
+        return new NUnitAssembly(r, 
+          testResultsForAssembly.Time(), 
+          testResultsForAssembly.Asserts(), 
+          testResultsForAssembly.IsFailure(), 
+          testResultsForAssembly.IsInconclusive());
+      })));
+    }
+
+    public static NUnitCulture From(XElement cultureElement)
+    {
+      return new NUnitCulture
       {
         CurrentCulture = CurrentCulture(cultureElement),
         CurrentUiCulture = CurrentUiCulture(cultureElement)
-      }, new NUnitResultSummary
-      {
-        Total = nUnitTestResults.Total(),
-        Errors = nUnitTestResults.Errors(),
-        Failures = nUnitTestResults.Failures(),
-        NotRun = nUnitTestResults.NotRun(),
-        Inconclusive = nUnitTestResults.Inconclusive(),
-        Ignored = nUnitTestResults.Ignored(),
-        Skipped = nUnitTestResults.Skipped(),
-        Invalid = nUnitTestResults.Invalid(),
-        DateTime = nUnitTestResults.DateTimeValue()
-      },
-      new NUnitAssemblies(AssemblyElements(d)));
+      };
     }
 
     private static IEnumerable<XElement> AssemblyElements(XContainer d)

@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using NUnitReportMerge.Out;
 
 namespace NUnitReportMerge.Model
 {
   public class NUnitAssemblies
   {
-    IEnumerable<XElement> _assemblyResults;
+    IEnumerable<NUnitAssembly> _assemblyResults;
 
-    public NUnitAssemblies(IEnumerable<XElement> assemblyResults)
+    public NUnitAssemblies(IEnumerable<NUnitAssembly> nUnitAssemblies)
     {
-      _assemblyResults = assemblyResults;
+      _assemblyResults = nUnitAssemblies;
     }
 
     public void JoinWith(NUnitAssemblies nUnitAssemblies)
@@ -21,14 +20,19 @@ namespace NUnitReportMerge.Model
 
     public void AddTo(OutResultsBuilder results)
     {
-      var testSuiteBuilder = new TestSuiteBuilder("Success", 0.0, 0, _assemblyResults);
-
-      foreach (var assemblyResults in _assemblyResults)
+      var testSuiteBuilder = new TestSuiteBuilder("Success", 0.0, 0);
+      
+      foreach (var assemblyResult in _assemblyResults)
       {
-        testSuiteBuilder.Add(assemblyResults);
+        assemblyResult.AddTo(testSuiteBuilder);
       }
 
       results.AddTestSuite(testSuiteBuilder);
+    }
+
+    public static NUnitAssemblies None()
+    {
+      return new NUnitAssemblies(new List<NUnitAssembly>());
     }
   }
 }

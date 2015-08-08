@@ -5,12 +5,7 @@ namespace NUnitReportMerge.Out
 {
   public class OutResultsBuilder
   {
-    readonly XElement _results;
-
-    public OutResultsBuilder(XElement results)
-    {
-      _results = results;
-    }
+    XElement _results;
 
     public void AddTestSuite(TestSuiteBuilder testSuiteBuilder)
     {
@@ -44,9 +39,9 @@ namespace NUnitReportMerge.Out
       return _results;
     }
 
-    public static OutResultsBuilder New(int total, int errors, int failures, int notRun, int inconclusive, int skipped, int invalid, DateTime dateTime)
+    public void AddSummary(int total, int errors, int failures, int notRun, int inconclusive, int skipped, int invalid, DateTime dateTime)
     {
-      return new OutResultsBuilder(XElement.Parse(XmlCulture.Format(
+      _results = XElement.Parse(XmlCulture.Format(
         "<test-results name=\"Merged results\" total=\"{0}\" errors=\"{1}\" failures=\"{2}\" not-run=\"{3}\" inconclusive=\"{4}\" skipped=\"{5}\" invalid=\"{6}\" date=\"{7}\" time=\"{8}\" />",
         total,
         errors,
@@ -56,7 +51,7 @@ namespace NUnitReportMerge.Out
         skipped,
         invalid,
         (dateTime.ToString("yyyy-MM-dd")),
-        (dateTime.ToString("HH:mm:ss")))));
+        (dateTime.ToString("HH:mm:ss"))));
     }
   }
 }

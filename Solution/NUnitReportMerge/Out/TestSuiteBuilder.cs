@@ -7,42 +7,53 @@ namespace NUnitReportMerge
 {
   public class TestSuiteBuilder
   {
-    readonly IEnumerable<XElement> _assemblyResults;
+    readonly List<XElement> _assemblyResults;
     string Result { get; set; }
     double Time { get; set; }
     int Asserts { get; set; }
 
-    public TestSuiteBuilder(string result, double time, int asserts, IEnumerable<XElement> assemblyResults)
+    public TestSuiteBuilder(string result, double time, int asserts)
     {
-      _assemblyResults = assemblyResults;
+      _assemblyResults = new List<XElement>();
       Result = result;
       Time = time;
       Asserts = asserts;
     }
 
-    public string CreateOutResult(XElement xElement)
+    public static string CreateOutResult(string result, bool isFailure, bool isInconclusive)
     {
       string outResult;
-      if (xElement.Attribute("result").Value == "Failure")
+      if (isFailure)
       {
         outResult = "Failure";
       }
-      else if (xElement.Attribute("result").Value == "Inconclusive" && Result == "Success")
+      else if (isInconclusive && result == "Success")
       {
         outResult = "Inconclusive";
       }
       else
       {
-        outResult = Result;
+        outResult = result;
       }
       return outResult;
     }
 
-    public void Add(XElement xElement)
+    public static bool IsInconclusive(XElement xElement)
     {
-      Result = CreateOutResult(xElement);
-      Time += XmlCulture.GetDouble(xElement.Attribute("time").Value);
-      Asserts += XmlCulture.GetInt(xElement.Attribute("asserts").Value);
+      return xElement.Attribute("result").Value == "Inconclusive";
+    }
+
+    public static bool IsFailure(XElement xElement)
+    {
+      return xElement.Attribute("result").Value == "Failure";
+    }
+
+    public void Add(XElement xElement, double time, int asserts, bool isFailure, bool isInconclusive)
+    {
+      _assemblyResults.Add(xElement);
+      Result = CreateOutResult(Result, isFailure, isInconclusive); //bug move this upper
+      Time += time;
+      Asserts += asserts;
     }
 
     public XElement Build()
