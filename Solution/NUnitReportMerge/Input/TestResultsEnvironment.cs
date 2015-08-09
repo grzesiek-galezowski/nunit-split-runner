@@ -4,7 +4,7 @@ namespace NUnitReportMerge.Input
 {
   public class TestResultsEnvironment
   {
-    private readonly XElement _env;
+    readonly XElement _env;
 
     public TestResultsEnvironment(XElement env)
     {

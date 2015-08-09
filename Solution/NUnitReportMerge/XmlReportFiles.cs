@@ -17,89 +17,64 @@ namespace NUnitReportMerge
 
       Console.WriteLine("Found reports: " + string.Join(", ", files));
 
-      return Parse(files);
+      return files
+        .Select(File.ReadAllText)
+        .Select(XDocument.Parse)
+        .Select(NewSingleRunReport)
+        .ToArray();
     }
 
-    private static string[] GetFiles(DirectoryName directory, string filter)
+    static string[] GetFiles(DirectoryName directory, string filter)
     {
       return Directory.GetFiles(directory.ToString(), filter, SearchOption.AllDirectories);
     }
 
-    private static SingleRunReport[] Parse(string[] files)
-    {
-      return files.Select(fileName => XDocument.Parse(File.ReadAllText(fileName)))
-        .Select(NewSingleRunReport).ToArray();
-    }
-
     static SingleRunReport NewSingleRunReport(XDocument d)
     {
-      TestResultsEnvironment testResultsEnvironment = new TestResultsEnvironment(EnvironmentElement(d));
+      var testResultsEnvironment = TestResultsEnvironmentFrom(d);
+      var testResultsCulture = TestResultsCultureFrom(d);
+      var testResultsSummary = NUnitTestResults(d);
+      var assemblyResults = AssemblyElements(d);
+      var nUnitAssemblies = assemblyResults.Select(ToNUnitAssembly);
 
-      XElement cultureElement = CultureElement(d);
-
-      XElement testResultsElement = TestResultsElement(d);
-      ResultSummary nUnitTestResults = new ResultSummary(testResultsElement);
-      IEnumerable<XElement> assemblyResults = AssemblyElements(d);
-      return new SingleRunReport(new NUnitEnvironment
-      {
-        NUnitVersion = testResultsEnvironment.NUnitVersion(),
-        ClrVersion = testResultsEnvironment.ClrVersion(),
-        OsVersion = testResultsEnvironment.OsVersion(),
-        Platform = testResultsEnvironment.PlatformVersion(),
-        Cwd = testResultsEnvironment.Cwd(),
-        MachineName = testResultsEnvironment.MachineName(),
-        User = testResultsEnvironment.User(),
-        UserDomain = testResultsEnvironment.UserDomain()
-      },
-      From(cultureElement), NUnitResultSummary.From(nUnitTestResults),
-      new NUnitAssemblies(assemblyResults.Select(r =>
-      {
-        var testResultsForAssembly = new TestResultsForAssembly(r);
-        return new NUnitAssembly(r, 
-          testResultsForAssembly.Time(), 
-          testResultsForAssembly.Asserts(), 
-          testResultsForAssembly.IsFailure(), 
-          testResultsForAssembly.IsInconclusive());
-      })));
+      return new SingleRunReport(
+        NUnitEnvironment.From(testResultsEnvironment), 
+        NUnitCulture.From(testResultsCulture), 
+        NUnitResultSummary.From(testResultsSummary), 
+        NUnitAssemblies.From(nUnitAssemblies));
     }
 
-    public static NUnitCulture From(XElement cultureElement)
+    static NUnitAssembly ToNUnitAssembly(XElement r)
     {
-      return new NUnitCulture
-      {
-        CurrentCulture = CurrentCulture(cultureElement),
-        CurrentUiCulture = CurrentUiCulture(cultureElement)
-      };
+      var testResultsForAssembly = new TestResultsForAssembly(r);
+      return NUnitAssembly.From(r, testResultsForAssembly);
     }
 
-    private static IEnumerable<XElement> AssemblyElements(XContainer d)
+    static TestResultsEnvironment TestResultsEnvironmentFrom(XDocument d)
     {
-      return d.Descendants().Where(el => el.Name == "test-suite" && el.Attribute("type").Value == "Assembly");
+      var xElement = d.Element("test-results").Element("environment");
+      return new TestResultsEnvironment(xElement);
     }
 
-    private static string CurrentCulture(XElement cultureElement)
+    static ResultSummary NUnitTestResults(XDocument d)
     {
-      return cultureElement.Attribute("current-culture").Value;
+      var testResultsElement = d.Element("test-results");
+
+      var nUnitTestResults = new ResultSummary(testResultsElement);
+      return nUnitTestResults;
     }
 
-    private static string CurrentUiCulture(XElement cultureElement)
+    static TestResultsCulture TestResultsCultureFrom(XDocument d)
     {
-      return cultureElement.Attribute("current-uiculture").Value;
+      var cultureElement = d.Element("test-results").Element("culture-info");
+      var testResultsCulture = new TestResultsCulture(cultureElement);
+      return testResultsCulture;
     }
 
-    private static XElement EnvironmentElement(XContainer d)
+    static IEnumerable<XElement> AssemblyElements(XContainer d)
     {
-      return d.Element("test-results").Element("environment");
-    }
-
-    private static XElement CultureElement(XContainer d)
-    {
-      return d.Element("test-results").Element("culture-info");
-    }
-
-    private static XElement TestResultsElement(XContainer d)
-    {
-      return d.Element("test-results");
+      return d.Descendants().Where(el => 
+        el.Name == "test-suite" && el.Attribute("type").Value == "Assembly");
     }
   }
 }

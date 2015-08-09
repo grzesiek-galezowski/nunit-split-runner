@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Xml.Linq;
 
-namespace NUnitReportMerge
+namespace NUnitReportMerge.Out
 {
   public class TestSuiteBuilder
   {
@@ -36,16 +35,6 @@ namespace NUnitReportMerge
         outResult = result;
       }
       return outResult;
-    }
-
-    public static bool IsInconclusive(XElement xElement)
-    {
-      return xElement.Attribute("result").Value == "Inconclusive";
-    }
-
-    public static bool IsFailure(XElement xElement)
-    {
-      return xElement.Attribute("result").Value == "Failure";
     }
 
     public void Add(XElement xElement, double time, int asserts, bool isFailure, bool isInconclusive)

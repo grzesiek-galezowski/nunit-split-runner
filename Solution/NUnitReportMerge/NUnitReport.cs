@@ -14,7 +14,7 @@ namespace NUnitReportMerge
 
     public NUnitReport(SingleRunReport firstRunReport, NUnitAssemblies resultsForEachAssembly)
     {
-      _summary = firstRunReport.NUnitSummary();
+      _summary = NUnitResultSummary.Empty();
       _firstRunReport = firstRunReport;
       _resultsForEachAssembly = resultsForEachAssembly;
     }

@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace NUnitReportMerge
 {
-  public class XmlCulture
+  public static class XmlCulture
   {
     public static int GetInt(string str)
     {

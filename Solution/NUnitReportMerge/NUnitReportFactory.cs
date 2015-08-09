@@ -7,7 +7,7 @@ using NUnitReportMerge.Model;
 namespace NUnitReportMerge
 {
   //bug refactor all of it
-  public class NUnitReportFactory
+  public static class NUnitReportFactory
   {
     public static NUnitReport CreateFrom(IEnumerable<SingleRunReport> list)
     {

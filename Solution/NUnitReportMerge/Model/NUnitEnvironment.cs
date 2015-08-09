@@ -1,4 +1,5 @@
-﻿using NUnitReportMerge.Out;
+﻿using NUnitReportMerge.Input;
+using NUnitReportMerge.Out;
 
 namespace NUnitReportMerge.Model
 {
@@ -23,6 +24,21 @@ namespace NUnitReportMerge.Model
         Cwd, 
         MachineName, 
         User, UserDomain);
+    }
+
+    public static NUnitEnvironment From(TestResultsEnvironment testResultsEnvironment)
+    {
+      return new NUnitEnvironment
+      {
+        NUnitVersion = testResultsEnvironment.NUnitVersion(),
+        ClrVersion = testResultsEnvironment.ClrVersion(),
+        OsVersion = testResultsEnvironment.OsVersion(),
+        Platform = testResultsEnvironment.PlatformVersion(),
+        Cwd = testResultsEnvironment.Cwd(),
+        MachineName = testResultsEnvironment.MachineName(),
+        User = testResultsEnvironment.User(),
+        UserDomain = testResultsEnvironment.UserDomain()
+      };
     }
   }
 }

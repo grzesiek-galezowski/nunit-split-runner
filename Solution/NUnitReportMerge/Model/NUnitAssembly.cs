@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using NUnitReportMerge.Out;
 
 namespace NUnitReportMerge.Model
 {
@@ -23,6 +24,15 @@ namespace NUnitReportMerge.Model
     public void AddTo(TestSuiteBuilder testSuiteBuilder)
     {
       testSuiteBuilder.Add(_xElement, _time, _asserts, _isFailure, _isInconclusive);
+    }
+
+    public static NUnitAssembly From(XElement r, TestResultsForAssembly testResultsForAssembly)
+    {
+      return new NUnitAssembly(r, 
+        testResultsForAssembly.Time(), 
+        testResultsForAssembly.Asserts(), 
+        testResultsForAssembly.IsFailure(), 
+        testResultsForAssembly.IsInconclusive());
     }
   }
 }

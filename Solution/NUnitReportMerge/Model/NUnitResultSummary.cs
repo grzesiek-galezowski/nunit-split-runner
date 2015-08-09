@@ -7,7 +7,12 @@ namespace NUnitReportMerge.Model
 {
   public class NUnitResultSummary
   {
-    public int Total { get; set; }
+    NUnitResultSummary()
+    {
+
+    }
+
+    public int Total { get; private set; }
     int Errors { get; set; }
     int Failures { get; set; }
     int NotRun { get; set; }
@@ -30,10 +35,19 @@ namespace NUnitReportMerge.Model
       DateTime = (new[] {DateTime, summary.DateTime}).Min();
     }
 
+    public static NUnitResultSummary Empty()
+    {
+      return new NUnitResultSummary()
+      {
+        DateTime = DateTime.MaxValue
+      };
+    }
+
     public static NUnitResultSummary From(ResultSummary nUnitTestResults)
     {
       return new NUnitResultSummary
       {
+
         Total = nUnitTestResults.Total(),
         Errors = nUnitTestResults.Errors(),
         Failures = nUnitTestResults.Failures(),

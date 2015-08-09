@@ -33,8 +33,18 @@ namespace NUnitReportMerge
     {
       _time = XmlCulture.GetDouble(r.Attribute("time").Value);
       _asserts = XmlCulture.GetInt(r.Attribute("asserts").Value);
-      _isFailure = TestSuiteBuilder.IsFailure(r);
-      _isInconclusive = TestSuiteBuilder.IsInconclusive(r);
+      _isFailure = IsFailure(r);
+      _isInconclusive = IsInconclusive(r);
+    }
+
+    static bool IsInconclusive(XElement xElement)
+    {
+      return xElement.Attribute("result").Value == "Inconclusive";
+    }
+
+    static bool IsFailure(XElement xElement)
+    {
+      return xElement.Attribute("result").Value == "Failure";
     }
   }
 }

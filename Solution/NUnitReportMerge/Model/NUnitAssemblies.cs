@@ -34,5 +34,10 @@ namespace NUnitReportMerge.Model
     {
       return new NUnitAssemblies(new List<NUnitAssembly>());
     }
+
+    public static NUnitAssemblies From(IEnumerable<NUnitAssembly> nUnitAssemblies)
+    {
+      return new NUnitAssemblies(nUnitAssemblies);
+    }
   }
 }

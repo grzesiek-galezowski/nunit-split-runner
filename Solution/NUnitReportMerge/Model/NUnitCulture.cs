@@ -11,5 +11,14 @@ namespace NUnitReportMerge.Model
     {
       outResultsBuilder.AddCultureInfo(CurrentCulture, CurrentUiCulture);
     }
+
+    public static NUnitCulture From(TestResultsCulture testResultsCulture)
+    {
+      return new NUnitCulture
+      {
+        CurrentCulture = testResultsCulture.CurrentCulture(),
+        CurrentUiCulture = testResultsCulture.CurrentUiCulture()
+      };
+    }
   }
 }

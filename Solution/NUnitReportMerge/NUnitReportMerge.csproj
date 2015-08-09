@@ -58,6 +58,7 @@
     <Compile Include="SingleRunReport.cs" />
     <Compile Include="Input\ResultSummary.cs" />
     <Compile Include="Out\TestSuiteBuilder.cs" />
+    <Compile Include="TestResultsCulture.cs" />
     <Compile Include="TestResultsForAssembly.cs" />
     <Compile Include="XmlReportFiles.cs" />
     <Compile Include="Model\NUnitResultSummary.cs" />
