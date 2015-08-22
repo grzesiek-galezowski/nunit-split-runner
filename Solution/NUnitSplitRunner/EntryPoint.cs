@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using System.Text;
 
 namespace NUnitSplitRunner
 {
@@ -7,18 +8,17 @@ namespace NUnitSplitRunner
   {
     public static void Main(string[] args)
     {
-      var runner = Runner.Create(args, LoadMaxAllowedAssemblyCountPerRun(), args[0], LoadMaxDegreeOfParallelism());
+      var options = new Options();
+
+      CommandLine.Parser.Default.ParseArgumentsStrict(args, options);
+
+      var runner = Runner.Create(
+        new[] {options.RunnerArgs}, 
+        options.AssembliesPerRun, 
+        options.RunnerPath, 
+        options.ParallelProcesses);
       runner.Run();
     }
 
-    public static int LoadMaxDegreeOfParallelism()
-    {
-      return Int32.Parse(ConfigurationManager.AppSettings["MaxDegreeOfParallelism"]); 
-    }
-
-    public static int LoadMaxAllowedAssemblyCountPerRun()
-    {
-      return Int32.Parse(ConfigurationManager.AppSettings["MaxAssemblyCountPerRun"]);
-    }
   }
 }
