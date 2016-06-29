@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnitSplitRunner;
+using NUnitSplitRunner.Running;
 
 namespace NUnitSplitRunnerSpecification
 {
@@ -23,8 +24,10 @@ namespace NUnitSplitRunnerSpecification
         "./ClassLibrary4.dll",
         "./ClassLibrary5.dll",
       };
-      var runner = Runner.Create(args, 1, args[0], 4);
+      var options = new Options { AssembliesPerRun = 1, NunitTimeoutSeconds = 600, ParallelProcesses = 1, RunnerArgs = string.Join(" ", args), RunnerPath = args[0]};
 
+      var runner = Runner.Create(options, new LoggerFactory(new ConsoleLogger()));
+      //  var runner = Runner.Create(args, 1, args[0], 4);
       //WHEN
       runner.Run();
 

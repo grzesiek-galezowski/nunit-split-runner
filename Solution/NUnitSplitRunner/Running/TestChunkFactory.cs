@@ -1,29 +1,31 @@
-﻿using AtmaFileSystem;
+﻿using System;
+using AtmaFileSystem;
 using NUnitSplitRunner.Output;
 
 namespace NUnitSplitRunner.Running
 {
   public class TestChunkFactory
   {
+    private readonly IOptions _options;
     readonly DirectoryName _partialDirName;
     readonly int _allowedAssemblyCount;
     readonly OutputBuilder _outputBuilder;
 
-    public TestChunkFactory(int allowedAssemblyCount, DirectoryName partialDirName, OutputBuilder outputBuilder)
+    public TestChunkFactory(IOptions options, DirectoryName partialDirName, OutputBuilder outputBuilder)
     {
-      _allowedAssemblyCount = allowedAssemblyCount;
+      _options = options;
       _partialDirName = partialDirName;
       _outputBuilder = outputBuilder;
     }
 
     public TestChunk CreateChunkFollowing(TestChunk currentChunk)
     {
-      return new TestChunk(currentChunk.RunId + 1, _partialDirName, _allowedAssemblyCount, _outputBuilder);
+      return new TestChunk(currentChunk.RunId + 1, _partialDirName, _options.AssembliesPerRun, _options.NunitTimeout);
     }
 
     public TestChunk CreateInitialChunk()
     {
-      return new TestChunk(1, _partialDirName, _allowedAssemblyCount, _outputBuilder);
+      return new TestChunk(1, _partialDirName, _options.AssembliesPerRun, _options.NunitTimeout);
     }
     
   }

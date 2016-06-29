@@ -11,15 +11,15 @@ namespace NUnitSplitRunner.Running
 {
   public class ChunkProcessing
   {
-    readonly AbsoluteFilePath _processPath;
     private readonly TestChunkFactory _testChunkFactory;
-    private readonly int _maxDegreeOfParallelism;
+    private readonly IChunksExecution _chunksExecution;
+    private readonly ILogger _logger;
 
-    public ChunkProcessing(AbsoluteFilePath processPath, TestChunkFactory testChunkFactory, int maxDegreeOfParallelism)
+    public ChunkProcessing(TestChunkFactory testChunkFactory, IChunksExecution chunksExecution, ILogger logger)
     {
-      _processPath = processPath;
       _testChunkFactory = testChunkFactory;
-      _maxDegreeOfParallelism = maxDegreeOfParallelism;
+      _chunksExecution = chunksExecution;
+      _logger = logger;
     }
 
     public static readonly DirectoryName PartialDirName = DirectoryName.Value("partial");
@@ -51,12 +51,7 @@ namespace NUnitSplitRunner.Running
         chunks.Add(new LastTestChunk(currentChunk));
       }
 
-      Parallel.ForEach(chunks, LoopConfig(), chunk => chunk.PerformNunitRun(_processPath, remainingTargetCommandline));
-    }
-
-    private ParallelOptions LoopConfig()
-    {
-      return new ParallelOptions() { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
+      _chunksExecution.Perform(chunks, remainingTargetCommandline);
     }
 
     public void MergeReports(DirectoryName partialDirName, string searchPattern, FileName finalXmlResultFileName)
@@ -65,7 +60,7 @@ namespace NUnitSplitRunner.Running
       {
         var list = XmlReportFiles.LoadFrom(partialDirName, searchPattern);
         var resultBuilder = new OutResultsBuilder();
-        Console.WriteLine("Loaded " + list.Length + " partial files");
+        _logger.Info("Loaded " + list.Length + " partial files");
         NUnitReportFactory.CreateFrom(list).Xml(resultBuilder);
         var finalXmlOutput = resultBuilder.Build();
         finalXmlOutput.Save(finalXmlResultFileName.ToString());
@@ -73,9 +68,87 @@ namespace NUnitSplitRunner.Running
       }
       catch (Exception e)
       {
-        Console.Error.WriteLine("ERROR: Merge failed due to: " + e);
+        _logger.Error("ERROR: Merge failed due to: " + e);
         throw;
       }
     }
+  }
+
+  public interface IChunksExecution
+  {
+    void Perform(IEnumerable<ITestChunk> chunks, RealRunnerInvocationOptions realRunngInvocationOptions);
+  }
+
+  public class ChunksExecution : IChunksExecution
+  {
+    private readonly AbsoluteFilePath _processPath;
+    private readonly int _maxDegreeOfParallelism;
+    private readonly ILoggerFactory _loggerFactory;
+
+    public ChunksExecution(AbsoluteFilePath processPath, int maxDegreeOfParallelism, ILoggerFactory loggerFactory)
+    {
+      _processPath = processPath;
+      _maxDegreeOfParallelism = maxDegreeOfParallelism;
+      _loggerFactory = loggerFactory;
+    }
+
+    public void Perform(IEnumerable<ITestChunk> chunks, RealRunnerInvocationOptions realRunngInvocationOptions)
+    {
+      if (_maxDegreeOfParallelism > 1)
+      {
+        var logger = _loggerFactory.GetBuffered();
+        Parallel.ForEach(chunks, LoopConfig(),
+          chunk =>
+          {
+            try
+            {
+              chunk.PerformNunitRun(_processPath, realRunngInvocationOptions, logger);
+            }
+            finally
+            {
+              logger.Flush();
+            }
+          });
+      }
+      else
+      {
+        foreach (var chunk in chunks)
+        {
+          chunk.PerformNunitRun(_processPath, realRunngInvocationOptions, _loggerFactory.GetInstant());
+        }
+      }
+    }
+
+    private ParallelOptions LoopConfig()
+    {
+      return new ParallelOptions { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
+    }
+  }
+
+  public interface ILoggerFactory
+  {
+    ILogger GetInstant();
+    ILogger GetBuffered();
+  }
+
+  public class LoggerFactory : ILoggerFactory
+  {
+    readonly ILogger _instantLogger;
+
+    public LoggerFactory(ILogger instantLogger)
+    {
+      _instantLogger = instantLogger;
+    }
+
+    public ILogger GetInstant()
+    {
+      return _instantLogger;
+    }
+
+    public ILogger GetBuffered()
+    {
+      return new BufferedConsoleLogger(_instantLogger);
+    }
+
   }
 }

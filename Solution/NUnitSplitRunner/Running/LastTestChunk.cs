@@ -13,10 +13,10 @@ namespace NUnitSplitRunner.Running
       _chunk = chunk;
     }
 
-    public void PerformNunitRun(AbsoluteFilePath thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions)
+    public void PerformNunitRun(AbsoluteFilePath thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions, ILogger logger)
     {
       Console.WriteLine("One last run...");
-      _chunk.PerformNunitRun(thirdPartyRunnerPath, realRunnerInvocationOptions);
+      _chunk.PerformNunitRun(thirdPartyRunnerPath, realRunnerInvocationOptions, logger);
     }
   }
 }
