@@ -5,6 +5,6 @@ namespace NUnitSplitRunner.Running
 {
   public interface ITestChunk
   {
-    void PerformNunitRun(AbsoluteFilePath thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions);
+    void PerformNunitRun(AbsoluteFilePath thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions, ILogger logger);
   }
 }

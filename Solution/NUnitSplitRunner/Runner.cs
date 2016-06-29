@@ -13,32 +13,29 @@ namespace NUnitSplitRunner
   {
     private readonly ProgramArguments _programArguments;
     private readonly RealRunnerInvocationOptions _realRunnerInvocationOptions;
-    private readonly AllStandardOutputThenErrorBuilder _outputBuilder;
     private readonly ChunkProcessing _chunkProcessing;
+    private readonly ILogger _logger;
+    const string AssemblyNameSeparator = " ";
 
-    public Runner(
-      ProgramArguments programArguments, 
-      RealRunnerInvocationOptions realRunnerInvocationOptions, 
-      AllStandardOutputThenErrorBuilder outputBuilder, 
-      ChunkProcessing chunkProcessing)
+    public Runner(ProgramArguments programArguments, RealRunnerInvocationOptions realRunnerInvocationOptions, ChunkProcessing chunkProcessing, ILogger logger)
     {
       _programArguments = programArguments;
       _realRunnerInvocationOptions = realRunnerInvocationOptions;
-      _outputBuilder = outputBuilder;
       _chunkProcessing = chunkProcessing;
+      _logger = logger;
     }
 
-    public static Runner Create(string[] args, int maxAllowedAssemblyCountPerRun, string thirdPartyRunnerPath, int maxDegreeOfParallelism)
+    public static Runner Create(IOptions options, ILoggerFactory loggerFactory)
     {
       AllStandardOutputThenErrorBuilder outputBuilder = new AllStandardOutputThenErrorBuilder();
       TestChunkFactory testChunkFactory = new TestChunkFactory(
-        maxAllowedAssemblyCountPerRun, 
-        ChunkProcessing.PartialDirName, 
+        options,
+        ChunkProcessing.PartialDirName,
         outputBuilder);
-      return new Runner(new ProgramArguments(args), new RealRunnerInvocationOptions(), outputBuilder, 
+      return new Runner(new ProgramArguments(options.RunnerArgs.Split(new[] { AssemblyNameSeparator }, StringSplitOptions.RemoveEmptyEntries)), new RealRunnerInvocationOptions(),
         new ChunkProcessing(
-          AbsoluteFilePath.Value(thirdPartyRunnerPath), 
-          testChunkFactory, maxDegreeOfParallelism));
+          testChunkFactory, new ChunksExecution(AbsoluteFilePath.Value(options.RunnerPath), 
+          options.ParallelProcesses, loggerFactory), loggerFactory.GetInstant()), loggerFactory.GetInstant());
     }
 
     public void Run()
@@ -46,14 +43,14 @@ namespace NUnitSplitRunner
       var dlls = new List<AnyFilePath>();
 
       _programArguments.SplitInto(dlls, _realRunnerInvocationOptions);
+
+      _logger.Info("Assemblies found: " + dlls.Count);
+
       _chunkProcessing.Execute(dlls, _realRunnerInvocationOptions);
-      
-      Console.WriteLine(_outputBuilder.Output());
-      Console.Error.WriteLine(_outputBuilder.Errors());
 
       _chunkProcessing.MergeReports(
-        ChunkProcessing.PartialDirName, 
-        ChunkProcessing.InputPattern, 
+        ChunkProcessing.PartialDirName,
+        ChunkProcessing.InputPattern,
         ChunkProcessing.OutputFileName);
     }
   }

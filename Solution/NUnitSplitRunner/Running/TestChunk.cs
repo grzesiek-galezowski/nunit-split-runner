@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using AtmaFileSystem;
 using NUnitSplitRunner.Input;
 using NUnitSplitRunner.Output;
@@ -14,14 +17,15 @@ namespace NUnitSplitRunner.Running
     readonly DirectoryName _partialDirName;
     readonly List<AnyFilePath> _dlls = new List<AnyFilePath>();
     readonly int _allowedAssemblyCount;
-    private readonly OutputBuilder _outputBuilder;
+    private ILogger _logger;
+    private readonly TimeSpan _timeout;
 
-    public TestChunk(int runId, DirectoryName partialDirName, int allowedAssemblyCount, OutputBuilder outputBuilder)
+    public TestChunk(int runId, DirectoryName partialDirName, int allowedAssemblyCount, TimeSpan timeout)
     {
       RunId = runId;
       _partialDirName = partialDirName;
       _allowedAssemblyCount = allowedAssemblyCount;
-      _outputBuilder = outputBuilder;
+      _timeout = timeout;
     }
 
     public void Add(AnyFilePath element)
@@ -36,7 +40,6 @@ namespace NUnitSplitRunner.Running
 
     public bool IsFilled()
     {
-      
       return _dlls.Count >= _allowedAssemblyCount;
     }
 
@@ -45,18 +48,19 @@ namespace NUnitSplitRunner.Running
       return _dlls.Count == 0;
     }
 
-    public void PerformNunitRun(AbsoluteFilePath thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions)
+    public void PerformNunitRun(AbsoluteFilePath thirdPartyRunnerPath, RealRunnerInvocationOptions realRunnerInvocationOptions, ILogger logger)
     {
+      _logger = logger;
       var exitCode = RunCommand(thirdPartyRunnerPath, realRunnerInvocationOptions);
       Handle(exitCode);
     }
 
-    private static void Handle(int exitCode)
+    private void Handle(int exitCode)
     {
-      Console.WriteLine("Exit code: " + exitCode);
+      _logger.Info("Exit code: " + exitCode);
       if (IsError(exitCode) && ThereWasNoErrorYet())
       {
-        Console.WriteLine("Assigning process exit code: " + exitCode);
+        _logger.Info("Assigning process exit code: " + exitCode);
         Environment.ExitCode = exitCode;
       }
     }
@@ -73,15 +77,77 @@ namespace NUnitSplitRunner.Running
 
     public int RunCommand(AbsoluteFilePath processName, RealRunnerInvocationOptions remainingTargetCommandline)
     {
-      var arguments = remainingTargetCommandline + " " + this.ToString();
-      Console.WriteLine("Running " + processName + " with: " + arguments);
+      var arguments = remainingTargetCommandline + " " + this;
+      _logger.Info("Running " + processName + " with: " + arguments);
+      _logger.Flush();
 
       using (var process = CreateNUnitProcess(processName, arguments))
       {
-        process.Start();
-        process.WaitForExit();
-        _outputBuilder.Add(arguments, process.StandardOutput, process.StandardError);
-        return process.ExitCode;
+        using (var outputWaitHandle = new AutoResetEvent(false))
+        using (var errorWaitHandle = new AutoResetEvent(false))
+        {
+          process.OutputDataReceived += ProcessOnOutputDataReceived(outputWaitHandle);
+          process.ErrorDataReceived += ProcessOnErrorDataReceived(errorWaitHandle);
+
+          process.Start();
+
+          process.BeginOutputReadLine();
+          process.BeginErrorReadLine();
+
+          if (process.WaitForExit((int)_timeout.TotalMilliseconds) &&
+              outputWaitHandle.WaitOne(_timeout) &&
+              errorWaitHandle.WaitOne(_timeout))
+          {
+            return process.ExitCode;
+          }
+          else
+          {
+            if (!process.HasExited)
+              process.Kill();
+            throw new TimeoutException("The external process did not finish within expected time: " + _timeout);
+          }
+        }
+      }
+    }
+
+    private DataReceivedEventHandler ProcessOnOutputDataReceived(AutoResetEvent outputWaitHandle)
+    {
+      return (sender, e) =>
+      {
+        if (e.Data == null)
+        {
+          SetIgnoreDisposed(outputWaitHandle);
+        }
+        else
+        {
+          _logger.Info(e.Data);
+        }
+      };
+    }
+
+    private DataReceivedEventHandler ProcessOnErrorDataReceived(AutoResetEvent errorWaitHandle)
+    {
+      return (sender, e) =>
+      {
+        if (e.Data == null)
+        {
+          SetIgnoreDisposed(errorWaitHandle);
+        }
+        else
+        {
+          _logger.Error(e.Data);
+        }
+      };
+    }
+
+    private static void SetIgnoreDisposed(AutoResetEvent errorWaitHandle)
+    {
+      try
+      {
+        errorWaitHandle.Set();
+      }
+      catch (ObjectDisposedException)
+      {
       }
     }
 
@@ -90,8 +156,8 @@ namespace NUnitSplitRunner.Running
       Directory.CreateDirectory(_partialDirName.ToString());
 
       return new Process
-        {
-          StartInfo =
+      {
+        StartInfo =
             {
               FileName = processName.ToString(),
               Arguments = arguments + " " + "/xml:" + _partialDirName + "\\nunit-partial-run-" + this.RunId + ".xml",
@@ -100,7 +166,7 @@ namespace NUnitSplitRunner.Running
               RedirectStandardError = true,
               RedirectStandardOutput = true
             },
-        };
+      };
     }
   }
 }
